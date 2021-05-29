@@ -12,6 +12,8 @@ export default class UsersSchema extends BaseSchema {
       table.string('phone', 15).unique().notNullable()
       table.string('username').unique()
       table.string('picture')
+      table.boolean('isVerified').defaultTo(false)
+      table.string('verification_code').nullable()
       table.string('remember_me_token').nullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

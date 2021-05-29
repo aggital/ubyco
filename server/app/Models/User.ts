@@ -17,6 +17,24 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
+  public fullname:string
+
+  @column()
+  public phone:string
+
+  @column()
+  public role_id: number
+
+  @column()
+  public verification_code:string
+
+  @column()
+  public isVerified:boolean
+
+  @column()
+  public picture:string
+
+  @column()
   public rememberMeToken?: string
 
   @column.dateTime({ autoCreate: true })

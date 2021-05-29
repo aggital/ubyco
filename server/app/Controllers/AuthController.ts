@@ -1,0 +1,174 @@
+// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import * as Helper from '../common'
+import User from "../Models/User";
+
+
+
+export default class AuthController {
+
+    public async register({request, response}){
+        // validate input
+        const data = schema.create({
+            fullname: schema.string({}, [
+                rules.required()
+            ]),
+            phone: schema.string({ trim: true }, [
+                 rules.required(),
+
+            ]),
+            email: schema.string({ escape: true }, [
+                rules.required(),
+                rules.email()
+           ]),
+            password: schema.string({}, [
+                rules.required(),
+           ]),
+        });
+
+        try {
+            //generate token
+            const verification_code: string = Helper.randomGenerator(10000, 999999)
+            //validate input
+            const payload = await request.validate({
+                schema: data,
+                messages: {
+                  required: 'The {{ field }} is required',
+                  'email.unique': 'email already exist',
+                  'phone.unique': 'phone number already exist',
+                  email: 'Invalid email input'
+                }
+              })
+            // send token to phone number
+            // await Helper.sendToken(payload.phone, `your comecari token is ${verification_code}`)
+
+            //Create new user
+            const user = new User()
+            user.phone = payload.phone,
+            user.email = payload.email,
+            user.fullname = payload.fullname,
+            user.password = payload.password,
+            user.role_id = 2
+            user.verification_code = verification_code
+            await user.save()
+            return response.status(200).send({message: user})
+        } catch (error) {
+            return response.badRequest({message: error.messages || error.detail})
+        }
+        
+    }
+
+    public async verify({auth, request, response}){
+        const data = schema.create({
+            verification_code: schema.string({}, [
+                rules.required(),
+           ]),
+        });
+        try {
+            const payload = await request.validate({ 
+                schema: data,
+                messages: {
+                    required: 'The {{ field }} is required',
+                  }
+            })
+            const user = await User.findByOrFail('verification_code', payload.verification_code);
+            user.isVerified = true
+            await user.save()
+
+            let name = user.fullname
+            name.split(/(\s+)/).filter( e => e.trim().length > 0)
+
+            await Helper.paystack.creactCustomer({
+                first_name: name[0],
+                last_name: name[1],
+                email: user.email,
+                phone: user.phone
+            })
+
+            
+            const token : any = await auth.use('api').generate(user, {
+                expiresIn: '7days'
+              })
+           
+            return response.status(200).send({message: token})
+        } catch (error) {
+            console.log(error)
+            return response.badRequest({message: error.messages || "Token not found"})
+        }
+    }
+
+    public async login({request, response, auth}){
+        //Validate User input
+        const data = schema.create({
+            email: schema.string({}, [
+                rules.required(),
+                rules.email()
+           ]),
+           password: schema.string({}, [
+            rules.required(),
+        ])
+    })
+        try {
+            const payload = await request.validate({ 
+                schema: data,
+                messages: {
+                    required: 'The {{ field }} is required',
+                    email: 'invalid email input'
+                  }
+            })
+            const user = await User.findByOrFail('email', payload.email)
+            //check if user is verified
+            if (!user.isVerified){
+                return response.status(401).send({message: "Kindly verify your account"})
+            }
+            //Authenticate User
+            const token :any = await auth.use('api').attempt(payload.email, payload.password, {
+                expiresIn: '7days'
+              })
+            return response.status(200).send({message: token})
+        } catch (error) {
+            return response.badRequest({message: error.messages || "Invalid User detail"})
+        }  
+    }
+
+    public async logout({auth}){
+        await auth.use('api').revoke()
+        return {
+          revoked: true
+        }
+    }
+
+    public async forget({request,response}) {
+        //validate
+        const data = schema.create({
+            phone: schema.string({}, [
+                rules.required()
+           ])   
+        })
+
+        try {
+            const payload = await request.validate({schema: data, message:{
+                required: 'The {{field}} is required'
+            }})
+            //generate token
+            const verification_code = await Helper.randomGenerator(100000, 999999)
+            //find phone if exist and update 
+            const user = await User.findByOrFail('phone', payload.phone);
+            user.verification_code = verification_code
+            user.isVerified = false
+            user.save()
+            //token sent
+            //await sendToken(user.phone, `Your reset token is ${verification_code}`)
+            return response.send({message: 'We sent you a token'})
+        } catch (error) {
+            return response.badRequest({message: error.messages || "User not found"})
+
+        }
+        
+    }
+
+    public async index({auth, response}){
+       return response.status(200).send({message: auth.user})
+    }
+
+}

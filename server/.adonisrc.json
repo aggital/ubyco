@@ -13,6 +13,9 @@
     "Database": "database",
     "Contracts": "contracts"
   },
+  "namespaces": {
+    "httpControllers": "App/Controllers"
+  },
   "preloads": [
     "./start/routes",
     "./start/kernel"
