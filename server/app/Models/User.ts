@@ -23,13 +23,10 @@ export default class User extends BaseModel {
   public phone:string
 
   @column()
-  public role_id: number
-
-  @column()
   public verification_code:string
 
   @column()
-  public isVerified:boolean
+  public is_verified:boolean
 
   @column()
   public picture:string

@@ -2,10 +2,15 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import * as Helper from '../common'
 import User from "../Models/User";
+import PayStack from 'paystack-node/src/PayStack'
+// let PayStack = require('paystack-node')
+import Env from '@ioc:Adonis/Core/Env'
 
 
 
 export default class AuthController {
+
+   
 
     public async register({request, response}){
         // validate input
@@ -48,12 +53,11 @@ export default class AuthController {
             user.email = payload.email,
             user.fullname = payload.fullname,
             user.password = payload.password,
-            user.role_id = 2
             user.verification_code = verification_code
             await user.save()
             return response.status(200).send({message: user})
         } catch (error) {
-            return response.badRequest({message: error.messages || error.detail})
+            return response.badRequest({error})
         }
         
     }
@@ -72,28 +76,30 @@ export default class AuthController {
                   }
             })
             const user = await User.findByOrFail('verification_code', payload.verification_code);
-            user.isVerified = true
+            user.is_verified = true
             await user.save()
-
+            //split the full name for paystack customer account creation
             let name = user.fullname
             name.split(/(\s+)/).filter( e => e.trim().length > 0)
 
-            await Helper.paystack.creactCustomer({
-                first_name: name[0],
-                last_name: name[1],
-                email: user.email,
-                phone: user.phone
-            })
+            const paystack: any = new PayStack(Env.get('PAYSTACK_TOKEN'))
+
+            const createCustomer = paystack.creactCustomer({
+                    first_name: name[0].charAt(0).toUpperCase() + name[0].slice(1),
+                    last_name: name[1].charAt(0).toUpperCase() + name[1].slice(1),
+                    email: user.email,
+                    phone: user.phone
+                })
 
             
             const token : any = await auth.use('api').generate(user, {
                 expiresIn: '7days'
               })
            
-            return response.status(200).send({message: token})
+            return response.status(200).send({message: token, createCustomer})
         } catch (error) {
             console.log(error)
-            return response.badRequest({message: error.messages || "Token not found"})
+            return response.badRequest({message: error})
         }
     }
 
@@ -118,7 +124,7 @@ export default class AuthController {
             })
             const user = await User.findByOrFail('email', payload.email)
             //check if user is verified
-            if (!user.isVerified){
+            if (!user.is_verified){
                 return response.status(401).send({message: "Kindly verify your account"})
             }
             //Authenticate User
@@ -155,7 +161,7 @@ export default class AuthController {
             //find phone if exist and update 
             const user = await User.findByOrFail('phone', payload.phone);
             user.verification_code = verification_code
-            user.isVerified = false
+            user.is_verified = false
             user.save()
             //token sent
             //await sendToken(user.phone, `Your reset token is ${verification_code}`)
