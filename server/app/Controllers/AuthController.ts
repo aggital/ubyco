@@ -2,10 +2,6 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import * as Helper from '../common'
 import User from "../Models/User";
-import PayStack from 'paystack-node/src/PayStack'
-// let PayStack = require('paystack-node')
-import Env from '@ioc:Adonis/Core/Env'
-
 
 
 export default class AuthController {
@@ -82,9 +78,8 @@ export default class AuthController {
             let name = user.fullname
             name.split(/(\s+)/).filter( e => e.trim().length > 0)
 
-            const paystack: any = new PayStack(Env.get('PAYSTACK_TOKEN'))
 
-            const createCustomer = paystack.creactCustomer({
+            const createCustomer = Helper.paystack.createCustomer({
                     first_name: name[0].charAt(0).toUpperCase() + name[0].slice(1),
                     last_name: name[1].charAt(0).toUpperCase() + name[1].slice(1),
                     email: user.email,
@@ -174,7 +169,7 @@ export default class AuthController {
     }
 
     public async index({auth, response}){
-       return response.status(200).send({message: auth.user})
+       return response.status(200).send({message: auth.user, })
     }
 
 }
