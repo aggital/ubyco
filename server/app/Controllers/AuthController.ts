@@ -6,8 +6,6 @@ import User from "../Models/User";
 
 export default class AuthController {
 
-   
-
     public async register({request, response}){
         // validate input
         const data = schema.create({
@@ -73,25 +71,26 @@ export default class AuthController {
             })
             const user = await User.findByOrFail('verification_code', payload.verification_code);
             user.is_verified = true
-            await user.save()
+            
             //split the full name for paystack customer account creation
-            let name = user.fullname
-            name.split(/(\s+)/).filter( e => e.trim().length > 0)
+            let name = user.fullname.split(' ');
 
-
-            const createCustomer = Helper.paystack.createCustomer({
-                    first_name: name[0].charAt(0).toUpperCase() + name[0].slice(1),
-                    last_name: name[1].charAt(0).toUpperCase() + name[1].slice(1),
+            //create user as a paystack customer
+            const createCustomer = await Helper.paystack.createCustomer({
+                    first_name: name[0],
+                    last_name: name[1],
                     email: user.email,
                     phone: user.phone
                 })
-
-            
+            //add customer_code to user details for future communication
+            user.customer_id =  createCustomer.body.data.customer_code
+            //save updated user
+            await user.save()
+            // Generate Token
             const token : any = await auth.use('api').generate(user, {
                 expiresIn: '7days'
               })
-           
-            return response.status(200).send({message: token, createCustomer})
+            return response.status(200).send({message: token, user})
         } catch (error) {
             console.log(error)
             return response.badRequest({message: error})
@@ -169,7 +168,11 @@ export default class AuthController {
     }
 
     public async index({auth, response}){
-       return response.status(200).send({message: auth.user, })
+        try {
+            return response.status(200).send({message: auth.user, })
+        } catch (error) {
+            return response.badRequest({message: error})
+        }
+       
     }
-
 }

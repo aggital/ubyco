@@ -4,7 +4,10 @@ import {
   column,
   beforeSave,
   BaseModel,
+  hasMany,
+  HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
+import UserAccount from 'App/Models/UserAccount'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -34,6 +37,9 @@ export default class User extends BaseModel {
   @column()
   public rememberMeToken?: string
 
+  @column()
+  public customer_id: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -46,4 +52,8 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
+
+  @hasMany(() => UserAccount)
+  public userAccounts: HasMany<typeof UserAccount>
+
 }
