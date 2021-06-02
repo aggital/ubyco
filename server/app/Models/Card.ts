@@ -20,7 +20,10 @@ export default class Card extends BaseModel {
   public updatedAt: DateTime
 
 //card will have different type of
-  @hasMany(() => CardType)
+  @hasMany(() => CardType, {
+    foreignKey: 'card_id'
+  })
+  
   public cardTypes: HasMany<typeof CardType>
 
 }

@@ -6,7 +6,7 @@ export default class UserAccount extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public bank_code: number

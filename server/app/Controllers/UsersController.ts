@@ -4,6 +4,8 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import Application from '@ioc:Adonis/Core/Application'
 import * as Helper from '../common'
+import Card from 'App/Models/Card'
+// import { Response } from '@adonisjs/http-server/build/standalone';
 
 export default class UsersController {
     public async getProfile({response, auth}){
@@ -74,7 +76,6 @@ export default class UsersController {
                 user.save()
                 return response.send({message: user}) 
             } catch (error) {
-                console.log(error)
                 return response.badRequest({error})
                 
         } 
@@ -89,9 +90,91 @@ export default class UsersController {
         }
     }
 
-    public async generateAccounts({auth, response}){
-        const user= await auth.user
-        const account = user.preload('userAcount')
-
+    public async getAccount({auth, response}){
+         try {
+            const user= await auth.user
+            const account =  await user?.load('userAccounts')
+            console.log(account)
+            return response.send({message: account})
+         } catch (error) {
+             console.log(error)
+             return response.badRequest(error)
+         }
+       
     }
+
+    public async getAccountName({request, response}){
+        const data = schema.create({
+            bank_code: schema.string({}, [
+                rules.required()
+            ]),
+            account_number: schema.string({ trim: true }, [
+                 rules.required(),
+
+            ])
+        });
+
+        try {
+            const payload = await request.validate({
+                schema: data,
+                    messages: {
+                    required: 'The {{ field }} is required',
+                    }
+            })
+           const name = await Helper.paystack.resolveAccountNumber({
+                account_number: payload.account_number,
+                bank_code: payload.bank_code,
+            })
+          return response.send({message: name.body.data.account_name})
+        } catch (error) {
+            return response.badRequest({message:error})
+        }
+    }
+
+    public async listBanks({response}){
+        try {
+            const bank  = await Helper.paystack.listBanks({
+                country:'nigeria'
+            })
+            return response.send({message: bank.body.data})
+        } catch (error) {
+            console.log(error)
+            return response.badRequest({error})
+        }
+    }
+
+    public async card({response}){
+        try {
+            const card = await Card.all()
+            return response.send({message: card})
+        } catch (error) {
+            return response.badRequest(error)
+        }
+        
+    }
+
+    public async cardType({request,response}){
+        const data = schema.create({
+            id: schema.number([
+                rules.required()
+            ])
+        });
+
+        try {
+            const payload = await request.validate({
+                schema: data,
+                    messages: {
+                    required: 'The {{ field }} is required',
+                    }
+            })
+            const card : any= await Card.findBy('id', payload.id) 
+            await card.load('cardTypes')
+            return response.send({message: card?.cardTypes})
+        } catch (error) {
+            console.log(error)
+            return response.badRequest(error)
+        }
+    }
+
+
 }

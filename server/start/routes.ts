@@ -20,7 +20,7 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-//Authentication
+//Authentication / General route
 Route.post('register', 'AuthController.register')
 Route.put('verify', 'AuthController.verify')
 Route.post('login', 'AuthController.login')
@@ -28,12 +28,18 @@ Route.post('logout', 'AuthController.logout')
 Route.put('forget', 'AuthController.forget')
 Route.get('/', 'AuthController.index').middleware('auth')
 
+Route.get('/list-banks', 'UsersController.listBanks')
+
 // user route
 Route.group(() => {
     Route.get('/profile', 'UsersController.getProfile')
     Route.put('/profile', 'UsersController.updateProfile')
+    Route.get('/get-account', 'UsersController.getAccount')
+    Route.get('/get-account-name', 'UsersController.getAccountName')
     Route.put('/add_account', 'UsersController.addAccount')
     Route.get('/get_picture', 'UsersController.getPicture')
+    Route.get('/card', 'UsersController.card')
+    Route.get('/card-type', 'UsersController.cardType')
 }).prefix('/user').middleware('auth')
 
 //giftcard
