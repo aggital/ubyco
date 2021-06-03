@@ -36,10 +36,12 @@ Route.group(() => {
     Route.put('/profile', 'UsersController.updateProfile')
     Route.get('/get-account', 'UsersController.getAccount')
     Route.get('/get-account-name', 'UsersController.getAccountName')
-    Route.put('/add_account', 'UsersController.addAccount')
-    Route.get('/get_picture', 'UsersController.getPicture')
+    Route.post('/add-account', 'UsersController.addAccount')
+    Route.get('/get-picture', 'UsersController.getPicture')
     Route.get('/card', 'UsersController.card')
     Route.get('/card-type', 'UsersController.cardType')
+    Route.post('/rate-calculator', 'UsersController.rateCalculator')
+
 }).prefix('/user').middleware('auth')
 
 //giftcard

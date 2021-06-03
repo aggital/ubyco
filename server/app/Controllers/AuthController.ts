@@ -84,9 +84,15 @@ export default class AuthController {
                 })
             //add customer_code to user details for future communication
             user.customer_id =  createCustomer.body.data.customer_code
+            //create user wallet
+            await user.related('wallet').create({
+                amount: '0'
+            })
+              
             //save updated user
             await user.save()
             // Generate Token
+
             const token : any = await auth.use('api').generate(user, {
                 expiresIn: '7days'
               })

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class UserAccount extends BaseModel {
+export default class UserAmount extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -9,18 +9,11 @@ export default class UserAccount extends BaseModel {
   public user_id: number
 
   @column()
-  public bank_code: number
-
-  @column()
-  public account_number: string
-
-  @column()
-  public account_name: string
+  public amount : string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
 }

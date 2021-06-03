@@ -1,10 +1,11 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-// import User from 'App/Models/User'
+import User from 'App/Models/User'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import Application from '@ioc:Adonis/Core/Application'
 import * as Helper from '../common'
 import Card from 'App/Models/Card'
+import UserAccount from 'App/Models/UserAccount'
 // import { Response } from '@adonisjs/http-server/build/standalone';
 
 export default class UsersController {
@@ -93,11 +94,9 @@ export default class UsersController {
     public async getAccount({auth, response}){
          try {
             const user= await auth.user
-            const account =  await user?.load('userAccounts')
-            console.log(account)
-            return response.send({message: account})
+            await user?.load('userAccounts')
+            return response.send({message: user.userAccounts})
          } catch (error) {
-             console.log(error)
              return response.badRequest(error)
          }
        
@@ -108,7 +107,7 @@ export default class UsersController {
             bank_code: schema.string({}, [
                 rules.required()
             ]),
-            account_number: schema.string({ trim: true }, [
+            account_number: schema.string({}, [
                  rules.required(),
 
             ])
@@ -174,6 +173,83 @@ export default class UsersController {
             console.log(error)
             return response.badRequest(error)
         }
+    }
+
+    public async rateCalculator({request, response}){
+        const data = schema.create({
+            id: schema.number([
+                rules.required()
+            ]),
+            amount: schema.number([
+                rules.required()
+            ]),
+            card_id: schema.number([
+                rules.required()
+                
+            ]) 
+        });
+
+        try{
+            const payload = await request.validate({
+                schema: data,
+                    messages: {
+                    required: 'The {{ field }} is required',
+                    }
+            })
+            const card : any= await Card.findBy('id', payload.id) 
+            await card.load('cardTypes', (cardQuery: any) => {
+                cardQuery.where('id', payload.card_id)
+            })
+            let rate;
+            card.cardTypes.forEach((card: any)=>{
+                rate = card.$attributes.rate
+            })
+
+            return response.send({message: Number(rate * payload.amount)})
+        } catch (error) {
+            return response.badRequest(error)
+        }
+    }
+
+    public async addAccount({auth, request, response}){
+        const data = schema.create({
+            bank_code: schema.string({}, [
+                rules.required()
+            ]),
+            account_number: schema.string({}, [
+                 rules.required(),
+            ]),
+            account_name: schema.string({}, [
+                rules.required(),
+           ])
+        });
+
+        try {
+            const payload = await request.validate({
+                schema: data,
+                    messages: {
+                        required: 'The {{ field }} is required',
+                    }
+            })
+            const user = await auth.user
+            const account = await User.query().preload('userAccounts', (accountQuery) => {
+                accountQuery.where('user_id', user.id)
+            })
+          
+            if (account.length > 0){
+                return response.send({message: "You already have an account"})
+            }
+            await user.related('userAccounts').create({
+                bank_code: payload.bank_code,
+                account_number: payload.account_number,
+                account_name: payload.account_name
+            })
+            return response.send({message:"Acount Successfully added"})
+        } catch (error) {
+            console.log(error)
+            response.badRequest(error)
+        }
+        
     }
 
 
