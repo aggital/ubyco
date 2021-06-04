@@ -18,6 +18,7 @@
 |
 */
 
+// import { Router } from '@adonisjs/http-server/build/standalone'
 import Route from '@ioc:Adonis/Core/Route'
 
 //Authentication / General route
@@ -41,10 +42,14 @@ Route.group(() => {
     Route.get('/card', 'UsersController.card')
     Route.get('/card-type', 'UsersController.cardType')
     Route.post('/rate-calculator', 'UsersController.rateCalculator')
-
 }).prefix('/user').middleware('auth')
 
-//giftcard
 Route.group(() => {
-    Route.get('/rate', 'CardController.getRate')
+    Route.post('/initiate-trade', 'GiftCardsController.intiateTrade')
+    Route.get('/trade', 'GiftCardsController.getTrade')
 }).prefix('/giftcard').middleware('auth')
+
+//giftcard
+// Route.group(() => {
+//     Route.get('/rate', 'CardController.getRate')
+// }).prefix('/giftcard').middleware('auth')

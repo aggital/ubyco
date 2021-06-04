@@ -11,6 +11,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import UserAccount from 'App/Models/UserAccount'
 import UserAmount from 'App/Models/UserAmount'
+import CardTransaction from 'App/Models/CardTransaction'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -65,5 +66,10 @@ export default class User extends BaseModel {
     foreignKey: 'user_id'
   })
   public wallet: HasOne<typeof UserAmount>
+
+  @hasMany(()=>CardTransaction, {
+    foreignKey: 'user_id'
+  })
+  public transaction: HasMany<typeof CardTransaction>
 
 }

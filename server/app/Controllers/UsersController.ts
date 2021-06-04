@@ -5,7 +5,7 @@ import { cuid } from '@ioc:Adonis/Core/Helpers'
 import Application from '@ioc:Adonis/Core/Application'
 import * as Helper from '../common'
 import Card from 'App/Models/Card'
-import UserAccount from 'App/Models/UserAccount'
+// import UserAccount from 'App/Models/UserAccount'
 // import { Response } from '@adonisjs/http-server/build/standalone';
 
 export default class UsersController {
@@ -251,6 +251,4 @@ export default class UsersController {
         }
         
     }
-
-
 }
