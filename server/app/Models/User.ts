@@ -12,7 +12,7 @@ import {
 import UserAccount from 'App/Models/UserAccount'
 import UserAmount from 'App/Models/UserAmount'
 import CardTransaction from 'App/Models/CardTransaction'
-
+import CoinTransaction from 'App/Models/CoinTransaction'
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -71,5 +71,11 @@ export default class User extends BaseModel {
     foreignKey: 'user_id'
   })
   public transaction: HasMany<typeof CardTransaction>
+
+
+  @hasMany(()=>CoinTransaction, {
+    foreignKey: 'user_id'
+  })
+  public coinTransaction: HasMany<typeof CoinTransaction>
 
 }

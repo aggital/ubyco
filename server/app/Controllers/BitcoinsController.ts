@@ -2,25 +2,22 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Application from '@ioc:Adonis/Core/Application'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
-// import User from 'App/Models/User';
-import CardTransaction from 'App/Models/CardTransaction'
+// import CoinTransaction from 'App/Models/CoinTransaction'
+import Coin from 'App/Models/Coin'
 
-
-// import User from 'App/Models/User'
-
-
-export default class GiftCardsController {
+export default class BitcoinsController {
     public async intiateTrade({request, response, auth}){
         const data = schema.create({
-           card_type_id: schema.number([
-                 rules.required(),
-            ]),
             amount: schema.string({}, [
                 rules.required(),
            ]),
            comment:schema.string({},[
                rules.required()
            ]),
+           receipt: schema.file({
+               size: '2mb',
+               extnames: ['jpg','png']
+           })
         });
         
         const payload = await request.validate({
@@ -31,30 +28,24 @@ export default class GiftCardsController {
         })
 
         try {
-            const cards = request.files('card', {
-                size: '2mb',
-                extnames: ['jpg', 'png'],
-              })
             const user = await auth.user
-            for (let card of cards) {
-                await card.move(Application.tmpPath('uploads/cards'),{
-                    name: `${cuid()}.${card.extname}`,
-                  })
-              }
-
-              let name : any = [];
-              for(let i = 0; i < cards.length; i++){
-                name.push(cards[i].fileName)
-              }
+            const coin = await Coin.findBy('id', request.coin_id)
+            console.log(coin);
+        //     const fileName = `${cuid()}.${payload.picture.extname}`
+        //     await payload.receipt.move(Application.tmpPath('uploads/coins'), {
+        //         name: fileName
+        //     })
+        //     const trasaction = await user.related('coinTransaction').create({
+        //      coin_id : payload.coin_id,
+        //      comment : payload.comment,
+        //      amount : payload.amount,
+        //      receipt : fileName,
+        //      total : 
+        // })
+              
             
-            const transaction = new CardTransaction()
-            transaction.user_id = user.id,
-            transaction.card_type_id = payload.card_type_id,
-            transaction.amount = payload.amount,
-            transaction.comments = payload.comment,
-            transaction.cards = Object(JSON.stringify(name))
-            transaction.save()
-            return response.send({message: transaction})
+
+            return response.send({message: coin})
         } catch (error) {
             return response.badRequest(error)  
         }

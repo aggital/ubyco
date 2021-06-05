@@ -43,13 +43,14 @@ Route.group(() => {
     Route.get('/card-type', 'UsersController.cardType')
     Route.post('/rate-calculator', 'UsersController.rateCalculator')
 }).prefix('/user').middleware('auth')
-
+//giftcard
 Route.group(() => {
     Route.post('/initiate-trade', 'GiftCardsController.intiateTrade')
     Route.get('/trade', 'GiftCardsController.getTrade')
+    Route.get('/trade-by/:id', 'GiftCardsController.getTradeBy')
 }).prefix('/giftcard').middleware('auth')
 
-//giftcard
-// Route.group(() => {
-//     Route.get('/rate', 'CardController.getRate')
-// }).prefix('/giftcard').middleware('auth')
+//bitcoin
+Route.group(() => {
+    Route.get('/initiate-trade', 'BitcoinController.intiateTrade')
+}).prefix('/giftcard').middleware('auth')
