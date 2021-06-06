@@ -36,24 +36,38 @@ export default class AdminsController {
     //get all card transactions
     public async GetCardsTransactions({response}){
        try {
-           const cards = await CardTransaction.all()
-            cards.forEach(card => {
-            card?.load((loader) => {
+           const transactions = await CardTransaction.all()
+            transactions.forEach(transaction => {
+            transaction?.load((loader) => {
                     loader.load('card')
                     .load('status_name')
                     .load('user')
                     
                   })
             });
-           return response.send({message: cards})
+           return response.send({message: transactions})
        } catch (error) {
            
        }
         
     }
 
-    //get all card transcation by status
-    
+    //get single card transaction
+    public async getTransaction({params, response}){
+        try {
+            const transaction = await CardTransaction.findBy('id', params.id)
+            await transaction?.load((loader) => {
+                loader.load('card')
+                .load('status_name')
+                .load('user')
+                
+              })
+            return response.send({message: transaction})
+        } catch (error) {
+            return response.badRequest(error)
+        }
+        
+    }
 
     //get all coin transactions
     public async GetCoinTransactions({response}){
