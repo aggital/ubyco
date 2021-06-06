@@ -1,6 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column,hasMany,HasMany  } from '@ioc:Adonis/Lucid/Orm'
+import { 
+    BaseModel, 
+    column,
+    belongsTo,
+    BelongsTo  
+} from '@ioc:Adonis/Lucid/Orm'
 import Coin from 'App/Models/Coin'
+import Status from 'App/Models/Status'
+import User from 'App/Models/User'
+
+
+
+
 export default class CoinTransaction extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -18,7 +29,7 @@ export default class CoinTransaction extends BaseModel {
   public total: string
 
   @column()
-  public comment: string
+  public comments: string
 
   @column()
   public receipt: string
@@ -35,9 +46,20 @@ export default class CoinTransaction extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(()=>Coin, {
+  @belongsTo(()=>Coin, {
     foreignKey: 'coin_id'
   })
-  public coinTransaction: HasMany<typeof Coin>
+  public coin: BelongsTo<typeof Coin>
+
+  @belongsTo(()=>Status, {
+    foreignKey: 'status'
+  })
+  public status_name: BelongsTo<typeof Status>
+
+  @belongsTo(() => User, {
+    foreignKey: 'user_id'
+  })
+  public user: BelongsTo<typeof User>
+
 
 }

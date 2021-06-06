@@ -1,11 +1,14 @@
 import { DateTime } from 'luxon'
 import User from 'App/Models/User'
+import Status from 'App/Models/Status'
 import { 
   BaseModel, 
   column,
   belongsTo,
-  BelongsTo
+  BelongsTo,
 } from '@ioc:Adonis/Lucid/Orm'
+import CardType from './CardType'
+
 
 export default class CardTransaction extends BaseModel {
 
@@ -38,8 +41,19 @@ export default class CardTransaction extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @belongsTo(()=>CardType, {
+    foreignKey: 'card_type_id'
+  })
+  public card: BelongsTo<typeof CardType>
+
+  @belongsTo(()=>Status, {
+    foreignKey: 'status'
+  })
+  public status_name: BelongsTo<typeof Status>
+
   @belongsTo(() => User, {
     foreignKey: 'user_id'
   })
   public user: BelongsTo<typeof User>
+
 }

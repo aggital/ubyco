@@ -28,7 +28,6 @@ Route.post('login', 'AuthController.login')
 Route.post('logout', 'AuthController.logout')
 Route.put('forget', 'AuthController.forget')
 Route.get('/', 'AuthController.index').middleware('auth')
-
 Route.get('/list-banks', 'UsersController.listBanks')
 
 // user route
@@ -47,10 +46,14 @@ Route.group(() => {
 Route.group(() => {
     Route.post('/initiate-trade', 'GiftCardsController.intiateTrade')
     Route.get('/trade', 'GiftCardsController.getTrade')
+    Route.get('/trades', 'BitcoinsController.getAllTrade')
     Route.get('/trade-by/:id', 'GiftCardsController.getTradeBy')
 }).prefix('/giftcard').middleware('auth')
 
 //bitcoin
 Route.group(() => {
-    Route.get('/initiate-trade', 'BitcoinController.intiateTrade')
-}).prefix('/giftcard').middleware('auth')
+    Route.post('/initiate-trade', 'BitcoinsController.intiateTrade')
+    Route.get('/trade/:id', 'BitcoinsController.getTrade')
+    Route.get('/trades', 'BitcoinsController.getAllTrade')
+    Route.get('/trade-by/:id', 'BitcoinsController.getTradeBy')
+}).prefix('/coin').middleware('auth')

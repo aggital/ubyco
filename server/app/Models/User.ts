@@ -62,17 +62,19 @@ export default class User extends BaseModel {
   })
   public userAccounts: HasOne<typeof UserAccount>
 
+
   @hasOne(()=>UserAmount, {
     foreignKey: 'user_id'
   })
   public wallet: HasOne<typeof UserAmount>
+
 
   @hasMany(()=>CardTransaction, {
     foreignKey: 'user_id'
   })
   public transaction: HasMany<typeof CardTransaction>
 
-
+  
   @hasMany(()=>CoinTransaction, {
     foreignKey: 'user_id'
   })

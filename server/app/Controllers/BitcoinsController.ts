@@ -2,12 +2,14 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Application from '@ioc:Adonis/Core/Application'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
-// import CoinTransaction from 'App/Models/CoinTransaction'
+import CoinTransaction from 'App/Models/CoinTransaction'
 import Coin from 'App/Models/Coin'
-
 export default class BitcoinsController {
     public async intiateTrade({request, response, auth}){
         const data = schema.create({
+            coin_id: schema.number([
+                rules.required(),
+           ]),
             amount: schema.string({}, [
                 rules.required(),
            ]),
@@ -29,47 +31,66 @@ export default class BitcoinsController {
 
         try {
             const user = await auth.user
-            const coin = await Coin.findBy('id', request.coin_id)
-            console.log(coin);
-        //     const fileName = `${cuid()}.${payload.picture.extname}`
-        //     await payload.receipt.move(Application.tmpPath('uploads/coins'), {
-        //         name: fileName
-        //     })
-        //     const trasaction = await user.related('coinTransaction').create({
-        //      coin_id : payload.coin_id,
-        //      comment : payload.comment,
-        //      amount : payload.amount,
-        //      receipt : fileName,
-        //      total : 
-        // })
-              
+            const coin : any = await Coin.findBy('id', payload.coin_id)
+            const rate = await coin.rate
             
-
-            return response.send({message: coin})
+            const fileName = `${cuid()}.${payload.receipt.extname}`
+            await payload.receipt.move(Application.tmpPath('uploads/coins'), {
+                name: fileName
+            })
+            const transaction = await user.related('coinTransaction').create({
+             coin_id : payload.coin_id,
+             comments : payload.comment,
+             amount : payload.amount,
+             receipt : fileName,
+             total : Number(payload.amount * rate)
+        })
+          return response.send({message: transaction})
         } catch (error) {
+            console.log(error)
             return response.badRequest(error)  
         }
     }
 
-    public async getTrade({response, auth}){
+    public async getAllTrade({response, auth}){
         try {
             const user = auth.user
-            await user.load('transaction')
-            return response.send({message: user.transaction})
+            const trades = await CoinTransaction.query()
+            .where('user_id', user.id)
+            .preload('status_name')
+            .preload('user')
+            .preload('coin')
+            return response.send({message: trades})
+        } catch (error) {
+            return response.badRequest(error)
+        }
+    }
+
+    public async getTrade({params, response}){
+        try {
+           const transaction = await CoinTransaction.findBy('id', params.id)
+           await transaction?.load((loader) => {
+            loader.load('coin').load('status_name').load('user')
+          })
+          
+            return response.send({message: transaction})
         } catch (error) {
             console.log(error)
             return response.badRequest(error)
         }
     }
 
-    public async getTradeBy({params, response, auth}){
+
+
+    public async getTradeBy({params, response}){
         try {
-            const user = auth.user
-            const status_id =  params.id
-            await user.load('transaction',(transactionQuery) => {
-                transactionQuery.where('status', status_id)
-              })
-            return response.send({message: user.transaction})
+            const status =  params.id
+            const trades = await CoinTransaction.query()
+            .where('status', status)
+            .preload('status_name')
+            .preload('user')
+            .preload('coin')
+            return response.send({message: trades})
         } catch (error) {
             console.log(error)
             return response.badRequest(error)

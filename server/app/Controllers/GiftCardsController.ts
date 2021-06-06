@@ -60,11 +60,28 @@ export default class GiftCardsController {
         }
     }
 
-    public async getTrade({response, auth}){
+    public async getAllTrade({response, auth}){
         try {
             const user = auth.user
-            await user.load('transaction')
-            return response.send({message: user.transaction})
+            const trades = await CardTransaction.query()
+            .where('user_id', user.id)
+            .preload('status_name')
+            .preload('user')
+            .preload('card')
+            return response.send({message: trades})
+        } catch (error) {
+            console.log(error)
+            return response.badRequest(error)
+        }
+    }
+
+    public async getTrade({params, response}){
+        try {
+           const transaction = await CardTransaction.findBy('id', params.id)
+           await transaction?.load((loader) => {
+            loader.load('card').load('status_name').load('user')
+          })
+           return response.send({message: transaction})
         } catch (error) {
             console.log(error)
             return response.badRequest(error)
