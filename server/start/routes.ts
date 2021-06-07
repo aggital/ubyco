@@ -45,8 +45,8 @@ Route.group(() => {
 //giftcard
 Route.group(() => {
     Route.post('/initiate-trade', 'GiftCardsController.intiateTrade')
+    Route.get('/trades', 'GiftCardsController.getAllTrade')
     Route.get('/trade', 'GiftCardsController.getTrade')
-    Route.get('/trades', 'BitcoinsController.getAllTrade')
     Route.get('/trade-by/:id', 'GiftCardsController.getTradeBy')
 }).prefix('/giftcard').middleware('auth')
 
@@ -57,3 +57,13 @@ Route.group(() => {
     Route.get('/trades', 'BitcoinsController.getAllTrade')
     Route.get('/trade-by/:id', 'BitcoinsController.getTradeBy')
 }).prefix('/coin').middleware('auth')
+
+Route.group(() => {
+    Route.get('/', 'AdminsController.index')
+    Route.get('/user', 'AdminsController.allUser')
+    Route.get('/user/:id', 'AdminsController.user')
+    Route.get('/card', 'AdminsController.getCardsTransactions')
+    Route.get('/card/:id', 'AdminsController.getCard')
+    Route.put('/card/:id', 'AdminsController.updateCardStatus')
+    Route.put('/confirm-card/:id', 'AdminsController.confirmCardTransaction')
+}).prefix('/admin').middleware(['auth', 'admin'])

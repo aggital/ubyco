@@ -8,6 +8,7 @@ export default class CardTransactions extends BaseSchema {
       table.increments('id')
       table.integer('user_id').references('users.id')
       table.integer('card_type_id').references('card_types.id')
+      table.string('rate').notNullable()
       table.string('amount').notNullable()
       table.text('comments')
       table.json('cards')

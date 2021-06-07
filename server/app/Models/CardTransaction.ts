@@ -6,8 +6,11 @@ import {
   column,
   belongsTo,
   BelongsTo,
+  hasOne,
+  HasOne
 } from '@ioc:Adonis/Lucid/Orm'
 import CardType from './CardType'
+import UserAccount from './UserAccount'
 
 
 export default class CardTransaction extends BaseModel {
@@ -30,10 +33,16 @@ export default class CardTransaction extends BaseModel {
   public comments: string
 
   @column()
+  public rate: string
+
+  @column()
   public cards: object
 
   @column()
   public status: number
+
+  @column()
+  public completed: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -55,5 +64,10 @@ export default class CardTransaction extends BaseModel {
     foreignKey: 'user_id'
   })
   public user: BelongsTo<typeof User>
+
+  @hasOne(() => UserAccount, {
+    foreignKey: 'user_id'
+  })
+  public wallet: HasOne<typeof UserAccount>
 
 }

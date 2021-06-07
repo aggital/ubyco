@@ -16,6 +16,9 @@ export default class BitcoinsController {
            comment:schema.string({},[
                rules.required()
            ]),
+           rate:schema.string({},[
+            rules.required()
+        ]),
            receipt: schema.file({
                size: '2mb',
                extnames: ['jpg','png']
@@ -43,6 +46,7 @@ export default class BitcoinsController {
              comments : payload.comment,
              amount : payload.amount,
              receipt : fileName,
+             rate,
              total : Number(payload.amount * rate)
         })
           return response.send({message: transaction})

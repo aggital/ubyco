@@ -232,12 +232,12 @@ export default class UsersController {
                     }
             })
             const user = await auth.user
-            const account = await User.query().preload('userAccounts', (accountQuery) => {
-                accountQuery.where('user_id', user.id)
-            })
-          
-            if (account.length > 0){
+            await user.load('userAccounts')
+            
+            if (user.userAccounts !== null){
+                console.log(user?.userAccounts)
                 return response.send({message: "You already have an account"})
+                
             }
             await user.related('userAccounts').create({
                 bank_code: payload.bank_code,

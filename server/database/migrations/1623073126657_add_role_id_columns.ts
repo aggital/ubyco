@@ -5,13 +5,12 @@ export default class Users extends BaseSchema {
 
   public async up () {
     this.schema.table(this.tableName, (table) => {
-      table.string('customer_id')   
+      table.integer('role_id').references('roles.id').defaultTo(1)
     })
   }
 
   public async down () {
     this.schema.table(this.tableName, (table) => {
-      table.string('customer_id')
     })
   }
 }

@@ -11,6 +11,7 @@ export default class CoinTransactions extends BaseSchema {
       table.string('amount').notNullable()
       table.string('total').notNullable
       table.text('comments')
+      table.string('rate').notNullable()
       table.string('receipt')
       table.boolean('completed').defaultTo(false)
       table.integer('status').references('statuses.id').defaultTo(1)

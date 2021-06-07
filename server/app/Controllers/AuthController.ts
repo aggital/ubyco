@@ -49,6 +49,7 @@ export default class AuthController {
             user.password = payload.password,
             user.verification_code = verification_code
             await user.save()
+            await user.refresh()
             return response.status(200).send({message: user})
         } catch (error) {
             return response.badRequest({error})
@@ -88,7 +89,6 @@ export default class AuthController {
             await user.related('wallet').create({
                 amount: '0'
             })
-              
             //save updated user
             await user.save()
             // Generate Token
@@ -126,6 +126,9 @@ export default class AuthController {
             //check if user is verified
             if (!user.is_verified){
                 return response.status(401).send({message: "Kindly verify your account"})
+            }
+            if (user.banned){
+                return response.status(401).send({message: "you are not allowed to use the system"})
             }
             //Authenticate User
             const token :any = await auth.use('api').attempt(payload.email, payload.password, {

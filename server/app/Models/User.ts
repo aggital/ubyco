@@ -7,12 +7,18 @@ import {
   hasMany,
   HasMany,
   hasOne,
-  HasOne
+  HasOne,
+  manyToMany,
+  ManyToMany,
+  belongsTo,
+  BelongsTo
 } from '@ioc:Adonis/Lucid/Orm'
 import UserAccount from 'App/Models/UserAccount'
 import UserAmount from 'App/Models/UserAmount'
 import CardTransaction from 'App/Models/CardTransaction'
 import CoinTransaction from 'App/Models/CoinTransaction'
+import Role from 'App/Models/Role'
+
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -44,6 +50,12 @@ export default class User extends BaseModel {
   @column()
   public customer_id: string
 
+  @column()
+  public banned: boolean
+
+  @column()
+  public role_id: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -74,10 +86,16 @@ export default class User extends BaseModel {
   })
   public transaction: HasMany<typeof CardTransaction>
 
-  
+
   @hasMany(()=>CoinTransaction, {
     foreignKey: 'user_id'
   })
   public coinTransaction: HasMany<typeof CoinTransaction>
+
+
+  @belongsTo(() => Role, {
+    foreignKey: 'role_id'
+  })
+  public role: BelongsTo<typeof Role>
 
 }

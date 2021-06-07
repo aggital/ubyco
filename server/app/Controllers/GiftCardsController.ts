@@ -21,6 +21,9 @@ export default class GiftCardsController {
            comment:schema.string({},[
                rules.required()
            ]),
+           rate:schema.string({},[
+            rules.required()
+        ]),
         });
         
         const payload = await request.validate({
@@ -50,6 +53,7 @@ export default class GiftCardsController {
             const transaction = new CardTransaction()
             transaction.user_id = user.id,
             transaction.card_type_id = payload.card_type_id,
+            transaction.rate = payload.rate,
             transaction.amount = payload.amount,
             transaction.comments = payload.comment,
             transaction.cards = Object(JSON.stringify(name))
@@ -62,7 +66,7 @@ export default class GiftCardsController {
 
     public async getAllTrade({response, auth}){
         try {
-            const user = auth.user
+            const user = await auth.user
             const trades = await CardTransaction.query()
             .where('user_id', user.id)
             .preload('status_name')
@@ -77,6 +81,7 @@ export default class GiftCardsController {
 
     public async getTrade({params, response}){
         try {
+            // const user = await auth.user
            const transaction = await CardTransaction.findBy('id', params.id)
            await transaction?.load((loader) => {
             loader.load('card').load('status_name').load('user')
