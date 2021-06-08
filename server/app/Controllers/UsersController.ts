@@ -5,6 +5,8 @@ import { cuid } from '@ioc:Adonis/Core/Helpers'
 import Application from '@ioc:Adonis/Core/Application'
 import * as Helper from '../common'
 import Card from 'App/Models/Card'
+import UserAmount from 'App/Models/UserAmount'
+import UserAccount from 'App/Models/UserAccount'
 // import UserAccount from 'App/Models/UserAccount'
 // import { Response } from '@adonisjs/http-server/build/standalone';
 
@@ -251,4 +253,39 @@ export default class UsersController {
         }
         
     }
+
+    public async withdraw({auth, request, response}){
+        
+        const data = schema.create({
+            amount: schema.number([
+                rules.required(),
+           ])
+        });
+
+        try {
+            const payload = await request.validate({
+                schema: data,
+                    messages: {
+                        required: 'The {{ field }} is required',
+                    }
+            })
+            const user  = await auth.user
+            const bank = await UserAccount.findByOrFail('user_id', user.id)
+            const wallet = await UserAmount.findByOrFail('user_id', user.id)
+            if (payload.amount > wallet.amount){
+                return response.badRequest({message: `This operation can't be processed` })
+            }
+            if (payload.amount < 2000){
+                return response.badRequest({message: `Kindly increase your witdrawal funds` })
+            }
+            const name = await Helper.paystack.create
+
+
+        } catch (error) {
+            
+        }
+
+    }
+
+    
 }

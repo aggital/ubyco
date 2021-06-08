@@ -4,6 +4,7 @@ import CardTransaction from 'App/Models/CardTransaction'
 import CoinTransaction from 'App/Models/CoinTransaction'
 import UserAmount from 'App/Models/UserAmount'
 import UserAccount from 'App/Models/UserAccount'
+import Status from 'App/Models/Status'
 
 
 export default class AdminsController {
@@ -91,29 +92,28 @@ export default class AdminsController {
     //confirm card transaction
     public async confirmCardTransaction({params, response}){
         try {
+           
             const transaction = await CardTransaction.findByOrFail('id', params.id)
+            const status = await Status.find(transaction.status)
+            const wallet = await UserAmount.findBy('user_id', transaction.user_id)
+
+            if(status?.name !== 'completed'){
+                return response.status(403).send({message: "Kind update the status of this transaction to completed" })
+            }
+            if(transaction?.completed === true){
+                return response.status(403).send({message: "This transaction has been paid out" })
+            }
             transaction.completed = true
+            const pre = Number(wallet?.amount)         
+            const value = Number(transaction.$attributes.rate * transaction.$attributes.amount + pre)
+            await wallet
+            .merge({ amount: value})
+            .save()
             transaction?.save()
-            transaction.refresh()
-            transaction?.load('status_name')
-            // if (transaction?.status_name !== 'completed'){
-            //     return response.send({message: 
-            //         "Update the status of the transaction to completed to proceed with the deposit"})
-            // }
-
-            console.log()
-
-
-            // const amount  = Number(transaction.amount)
-            // const rate  = Number(transaction.rate)
-            // let total = amount * rate
-
-            // const wallet  = await UserAmount.findBy('user_id', transaction.user_id)
-            // const last_record = Number(wallet?.amount)
-            // const data = total + last_record
-
-            //add funds to user account
+            
             return response.send({message: transaction})
+            
+           
         } catch (error) {
             console.log(error)
             return response.badRequest(error)
