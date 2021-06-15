@@ -27,12 +27,15 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+       <Stack.Screen 
+        name="Auth"
+        component={AuthTabNavigator}
+      />
       <Stack.Screen 
         name="Root" 
         component={DrawerTabNavigator}
-        
       />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="NotFound" component={NotFoundScreen}/>
     </Stack.Navigator>
   );
 }

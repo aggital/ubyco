@@ -16,8 +16,8 @@ export default Title
 
 const styles = StyleSheet.create({
     headerText: {
-        fontSize: 30,
-        fontWeight: 'normal',
-        color: '#6236ff',
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333333',
       },
 })

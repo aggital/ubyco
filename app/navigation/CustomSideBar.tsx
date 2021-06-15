@@ -44,7 +44,7 @@ const CustomSideBar = (props: Props) => {
             </View>
         </View>
       <View style= {styles.balanceCard}>
-        <Element.Text h4 style={{color:'gray'}}>
+        <Element.Text h4 style={{color:'white'}}>
            Available Balance
         </Element.Text>
         <Element.Text h4 style={{color:'white', fontWeight:'bold'}}>
@@ -75,14 +75,13 @@ const CustomSideBar = (props: Props) => {
         label="Help"
         icon={({ focused, color, size }) => 
             <Element.Icon 
-                color={"#6236ff"} 
+                color={"#f63757"} 
                 size= {24}
                 name={focused ? 'home' : 'home'}/>
         }
         onPress={() => alert('Link to help')} />
       </DrawerContentScrollView>
       <View style={styles.footer}>
-        <Element.Divider orientation="horizontal" width={280} />
         <Element.Text
             style={{
             fontSize: 16,
@@ -105,14 +104,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     customer_id:{
-        color:'#6236FF',
+        color:'#f63757',
         fontWeight:'bold'
     },
     balanceCard:{
         flexDirection:'column',
         width: 300,
         height: 120,
-        backgroundColor: '#6236FF',
+        backgroundColor: '#f63757',
         padding: 10
     },
     sideMenuProfileIcon: {

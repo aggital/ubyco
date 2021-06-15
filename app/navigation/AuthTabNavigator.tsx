@@ -6,67 +6,89 @@
  import { Ionicons } from '@expo/vector-icons';
  import { createStackNavigator } from '@react-navigation/stack';
  import * as React from 'react';
+
+ import LoginScreen from '../screens/Auth/LoginScreen';
+ import SignUpScreen from '../screens/Auth/SignUpScreen';
+ import VerifyScreen from '../screens/Auth/VerifyScreen'
+ import { AuthTabParamList, AuthParamList} from '../types';
  
- import Colors from '../constants/Colors';
- import useColorScheme from '../hooks/useColorScheme';
- import TabOneScreen from '../screens/HomeScreen';
- import TabTwoScreen from '../screens/TabTwoScreen';
- import { AuthTabParamList, HomeParamList} from '../types';
+ const AuthTab = createStackNavigator<AuthTabParamList>();
  
- const DrawerTab = createStackNavigator<AuthTabParamList>();
- 
- export default function BottomTabNavigator() {
-   const colorScheme = useColorScheme();
- 
-   return (
-     <DrawerTab.Navigator
-       initialRouteName="TabOne"
+ export default function AuthTabNavigator() {
+  return (
+     <AuthTab.Navigator
+       initialRouteName="Login"
       >
-       <DrawerTab.Screen
-         name="TabOne"
-         component={TabOneNavigator}
+       <AuthTab.Screen
+         name="Login"
+         component={LoginNavigator}
+         options={{
+           headerShown: false
+          }}
        />
-       <DrawerTab.Screen
-         name="TabTwo"
-         component={TabTwoNavigator}
+       <AuthTab.Screen
+         name="SignUp"
+         component={SignUpNavigator}
+         options={{
+           headerShown: false
+          }}
        />
-     </DrawerTab.Navigator>
+       <AuthTab.Screen
+         name="Verify"
+         component={VerifyNavigator}
+         options={{
+           headerShown: false
+          }}
+       />
+
+     </AuthTab.Navigator>
    );
- }
- 
- // You can explore the built-in icon families and icons on the web at:
- // https://icons.expo.fyi/
- function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
-   return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
  }
  
  // Each tab has its own navigation stack, you can read more about this pattern here:
  // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
- const TabOneStack = createStackNavigator<TabOneParamList>();
+ const AuthStack = createStackNavigator<AuthParamList>();
  
- function TabOneNavigator() {
+ function LoginNavigator() {
    return (
-     <TabOneStack.Navigator>
-       <TabOneStack.Screen
-         name="TabOneScreen"
-         component={TabOneScreen}
-         options={{ headerTitle: 'Tab One Title' }}
+     <AuthStack.Navigator>
+       <AuthStack.Screen
+         name="LoginScreen"
+         component={LoginScreen}
+         options={{
+          headerShown: false
+        }}
        />
-     </TabOneStack.Navigator>
+     </AuthStack.Navigator>
    );
  }
- 
- const TabTwoStack = createStackNavigator<TabTwoParamList>();
- 
- function TabTwoNavigator() {
-   return (
-     <TabTwoStack.Navigator>
-       <TabTwoStack.Screen
-         name="TabTwoScreen"
-         component={TabTwoScreen}
-         options={{ headerTitle: 'Tab Two Title' }}
-       />
-     </TabTwoStack.Navigator>
-   );
- }
+
+ function SignUpNavigator() {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{
+         headerShown: false
+       }}
+      />
+    </AuthStack.Navigator>
+  );
+}
+
+function VerifyNavigator() {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        name="VerifyScreen"
+        component={VerifyScreen}
+        options={{
+         headerShown: false
+       }}
+      />
+    </AuthStack.Navigator>
+  );
+}
+
  

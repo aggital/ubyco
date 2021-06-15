@@ -5,12 +5,20 @@
 
 export type RootStackParamList = {
   Root: undefined;
+  Auth: undefined;
   NotFound: undefined;
 };
 
+export type AuthParamList = {
+  LoginScreen : undefined;
+  SignUpScreen: undefined;
+  VerifyScreen: undefined;
+};
+
 export type AuthTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  Login: undefined;
+  SignUp: undefined;
+  Verify: undefined;
 };
 
 export type DrawerTabParamList = {
@@ -24,6 +32,7 @@ export type HeaderParamList = {
 
 export type HomeParamList = {
   HomeScreen: undefined;
+  GiftCardScreen: undefined;
 };
 
 export type TabTwoParamList = {

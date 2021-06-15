@@ -7,12 +7,11 @@
  import { createDrawerNavigator } from '@react-navigation/drawer';
  import { createStackNavigator } from '@react-navigation/stack';
  import * as React from 'react';
- import * as Element from 'react-native-elements'
-
  import HomeScreen from '../screens/HomeScreen';
- 
+ import GIftCardScreen from '../screens/GiftCardScreen';
  import { HomeParamList} from '../types';
  import CustomSideBar from './CustomSideBar'
+import GiftCardScreen from '../screens/GiftCardScreen';
  
  const DrawerTab = createDrawerNavigator();
 
@@ -23,7 +22,7 @@
    return (
      <DrawerTab.Navigator
      drawerContentOptions={{
-        activeTintColor: '#6236FF',
+        activeTintColor: '#f63757',
         itemStyle: {marginVertical: 5},
       }}
       screenOptions= {{
@@ -39,21 +38,20 @@
                         <MaterialCommunityIcons 
                             name="home-circle" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
 
             <DrawerTab.Screen
                 name="Giftcards"
-                component={HomeNavigator}
+                component={GiftNavigator}
                 options={{
-
                     drawerIcon: () => (
                         <MaterialCommunityIcons 
                             name="cards" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -66,7 +64,7 @@
                         <MaterialCommunityIcons 
                             name="bitcoin" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -79,7 +77,7 @@
                         <MaterialCommunityIcons 
                             name="calculator" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -92,7 +90,7 @@
                         <MaterialCommunityIcons 
                             name="bank" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -105,7 +103,7 @@
                         <AntDesign
                             name="user" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -118,7 +116,7 @@
                         <MaterialCommunityIcons
                             name="email" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -131,7 +129,7 @@
                         <AntDesign
                             name="bells" 
                             size={24} 
-                            color="#6236ff" />
+                            color="#f63757" />
                     )
                 }}
             />
@@ -139,11 +137,6 @@
    );
  }
  
- // You can explore the built-in icon families and icons on the web at:
- // https://icons.expo.fyi/
- function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
-   return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
- }
  
  // Each tab has its own navigation stack, you can read more about this pattern here:
  // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
@@ -162,4 +155,18 @@
      </HomeStack.Navigator>
    );
  }
+
+ function GiftNavigator() {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="GiftCardScreen"
+          component={GiftCardScreen}
+          options={{
+             headerShown: false
+           }}
+        />
+      </HomeStack.Navigator>
+    );
+  }
  

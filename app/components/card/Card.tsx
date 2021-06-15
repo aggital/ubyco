@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     container:{
         height: 150,
         width: 350,
-        backgroundColor: '#6236ff',
+        backgroundColor: '#f63757',
         alignContent:'center',
         shadowOpacity:0.4,
         shadowRadius:0.6,
@@ -26,13 +26,13 @@ const styles = StyleSheet.create({
         shadowColor:'red'
     },
     balanceText:{
-        color: 'white', 
-        fontSize: 16,
+        color: '#333333', 
+        fontSize: 20,
         padding: 10,
     },
     idText:{
-        color: 'white', 
-        fontSize: 16,
+        color: '#333333', 
+        fontSize: 18,
         padding: 10,
     },
 
