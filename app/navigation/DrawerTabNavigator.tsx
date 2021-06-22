@@ -12,6 +12,8 @@
  import { HomeParamList} from '../types';
  import CustomSideBar from './CustomSideBar'
 import GiftCardScreen from '../screens/GiftCardScreen';
+import CoinScreen from '../screens/CoinScreen';
+import RateCalculatorScreen from '../screens/RateCalculatorScreen'
  
  const DrawerTab = createDrawerNavigator();
 
@@ -58,7 +60,7 @@ import GiftCardScreen from '../screens/GiftCardScreen';
 
             <DrawerTab.Screen
                 name="Coins"
-                component={HomeNavigator}
+                component={CoinNavigator}
                 options={{
                     drawerIcon: () => (
                         <MaterialCommunityIcons 
@@ -71,7 +73,7 @@ import GiftCardScreen from '../screens/GiftCardScreen';
 
             <DrawerTab.Screen
                 name="Rate Calculator"
-                component={HomeNavigator}
+                component={RateNavigator}
                 options={{
                     drawerIcon: () => (
                         <MaterialCommunityIcons 
@@ -169,4 +171,33 @@ import GiftCardScreen from '../screens/GiftCardScreen';
       </HomeStack.Navigator>
     );
   }
+
+  function CoinNavigator() {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="CoinScreen"
+          component={CoinScreen}
+          options={{
+             headerShown: false
+           }}
+        />
+      </HomeStack.Navigator>
+    );
+  }
+
+  function RateNavigator() {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="RateCalculatorScreen"
+          component={RateCalculatorScreen}
+          options={{
+             headerShown: false
+           }}
+        />
+      </HomeStack.Navigator>
+    );
+  }
+
  

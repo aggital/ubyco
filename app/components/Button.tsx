@@ -21,5 +21,3 @@ const Button: FC<Props> = ({title, onPress}) => {
 }
 
 export default Button
-
-const styles = StyleSheet.create({})

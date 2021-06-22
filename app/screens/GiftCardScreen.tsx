@@ -1,24 +1,29 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import { Text, View, FlatList } from 'react-native';
 import * as Element from 'react-native-elements'
-import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
+import { useNavigation } from '@react-navigation/native';
+import Picker from '../components/Picker'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import Title from '../components/theme/Title'
-import ListItem from '../components/ListItem'
+import Input from '../components/Input'
 import Header from '../components/theme/Header'
-import Card from '../components/card/Card'
 import Navigation from '../navigation';
+import RandomInput from '../components/RandomInput';
+import Button from '../components/Button'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 
 
 
 
 export default function GiftCardScreen() {
-  const [items, setItems] = React.useState([]);
+  const [card, setCard] = React.useState([]);
   const [value, setValue] = React.useState("");
-  
+  const [price, setPrice] =  React.useState(0);
+  const [ total, setTotal] = React.useState(0);
+
   const list = [
                     {
                         id: 1,
@@ -63,38 +68,126 @@ export default function GiftCardScreen() {
 
     React.useEffect(() => {
       async function getCard() {
-        setCard(list.map(({ name }) => ({key: name.id, label: name, value: name})));
+        setCard(list.map(({ card }) => ({key: card.id, label: card, value: card})));
       }
       getCard();
     }, []);
 
-     const navigation = useNavigation();
+    const navigation = useNavigation();
   return (
-    <SafeAreaView style={{backgroundColor:'#f9e8ef'}} >
+    <SafeAreaView style={{backgroundColor:'#f9e8ef', flex: 1}}>
         <View>
             <Header/>
         </View>
        
-        <ScrollView style={{marginTop: 40, marginBottom: 50}}>
+        <KeyboardAwareScrollView style={{marginTop: 40, flex: 1}}>
           {/* Title */}
-          <View style={{flex: 1, alignSelf:'center',}}>
+          <View style={{alignSelf:'center',}}>
             <Title name={'Trade Cards'} />
           </View>
-          <View>
-             <RNPickerSelect
-                placeholder={{}}
-                items={list}
-                onValueChange={()=>getCard()}
-                InputAccessoryView={() => null}
-                // style={pickerSelectStyles}
-                value={setCard}
-              />
-          </View>
 
-            
-        
-        
-        </ScrollView>
+          <View style={{ alignSelf: 'center'}}>
+            <Picker 
+              title="Brand" 
+              placeholder="Select A Card Brand" 
+              items={card}
+              value={`${value}`}
+              onValueChange = {(value) => setValue(value)}
+              require = '*'
+            />
+            <View
+            style={{
+              borderBottomColor: 'gray',
+              borderBottomWidth: 1,
+            }}
+          />
+
+          <Picker 
+              title="Card Type" 
+              placeholder="Select A Card Brand" 
+              items={card}
+              value={`${value}`}
+              onValueChange = {(value) => setValue(value)}
+              require = '*'
+            />
+          <View
+            style={{
+              borderBottomColor: 'gray',
+              borderBottomWidth: 1,
+            }}
+          />
+
+          <RandomInput 
+            title='Price'
+            placeholder='$'
+            value={price}
+            onChangeText={setPrice}
+            keyType='phone-pad'
+            />
+
+          <View
+            style={{
+              borderBottomColor: 'gray',
+              borderBottomWidth: 1,
+            }}
+          />
+
+          <RandomInput 
+            title='Total'
+            placeholder='0'
+            value={total}
+            onChangeText={setTotal}
+            disable
+            />
+
+          <View
+            style={{
+              borderBottomColor: 'gray',
+              borderBottomWidth: 1,
+            }}
+          />
+
+          <Element.Button 
+            title= "Upload Giftcard's*"
+            titleStyle={{alignSelf:'flex-end', color:'black'}}
+            buttonStyle={{borderRadius: 40, borderColor:'red',  }}
+            containerStyle={{margin:20, height: 40, borderColor:'red'}}
+            onPress={()=>console.log('somthing should be done')}
+            type="outline"
+            icon={
+              <Element.Icon
+                name="card-giftcard"
+                type='material-icon'
+                size={18}
+                color="red"
+               
+              />
+            }
+         />
+
+
+         <Element.Input
+            placeholder='Add a Comment'
+            containerStyle={{
+              alignSelf:'center',
+              borderWidth:2,
+              borderRadius: 10,
+              borderColor: 'red'
+           }}
+            inputContainerStyle={{
+              width:300,
+              padding: 7
+            }}
+            multiline={true}
+
+         />
+         <View style={{marginTop: 10}}>
+            <Button title = "Trade Card" />
+         </View>
+         
+      </View>
+
+        </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -102,5 +195,11 @@ export default function GiftCardScreen() {
 const styles = StyleSheet.create({
   container:{
     flex:1,
-  }
-});
+  },
+  selectCard:{
+    borderColor:'green',
+    position:'absolute',
+    marginLeft:100
+  },
+ 
+}); 
