@@ -14,6 +14,7 @@
 import GiftCardScreen from '../screens/GiftCardScreen';
 import CoinScreen from '../screens/CoinScreen';
 import RateCalculatorScreen from '../screens/RateCalculatorScreen'
+import WithdrawalScreen from '../screens/WithdrawalScreen'
  
  const DrawerTab = createDrawerNavigator();
 
@@ -86,7 +87,7 @@ import RateCalculatorScreen from '../screens/RateCalculatorScreen'
 
             <DrawerTab.Screen
                 name="withdrawal"
-                component={HomeNavigator}
+                component={WithdrawalNavigator}
                 options={{
                     drawerIcon: () => (
                         <MaterialCommunityIcons 
@@ -192,6 +193,22 @@ import RateCalculatorScreen from '../screens/RateCalculatorScreen'
         <HomeStack.Screen
           name="RateCalculatorScreen"
           component={RateCalculatorScreen}
+          options={{
+             headerShown: false
+           }}
+        />
+      </HomeStack.Navigator>
+    );
+  }
+
+
+  
+  function WithdrawalNavigator() {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="WithdrawalScreen"
+          component={WithdrawalScreen}
           options={{
              headerShown: false
            }}

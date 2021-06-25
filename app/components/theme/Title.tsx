@@ -1,8 +1,12 @@
-import React from 'react'
+import React, {FC} from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-elements'
 
-const Title = ({name}) => {
+interface Props {
+    name: string;
+ }
+
+const Title: FC<Props>  = ({name}) => {
     return (
         <View>
              <Text h3 style={styles.headerText}>

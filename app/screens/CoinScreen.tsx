@@ -1,15 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
-import { Text, View, FlatList } from 'react-native';
+import { StyleSheet, SafeAreaView} from 'react-native';
+import {View } from 'react-native';
 import * as Element from 'react-native-elements'
-import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
 import Picker from '../components/Picker'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
 import Title from '../components/theme/Title'
-import Input from '../components/Input'
 import Header from '../components/theme/Header'
-import Navigation from '../navigation';
 import RandomInput from '../components/RandomInput';
 import Button from '../components/Button'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'

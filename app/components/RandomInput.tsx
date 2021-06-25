@@ -8,7 +8,6 @@ interface Props {
     secureTextEntry?: boolean;
     disable?: boolean;
     keyType: any;
-    type:string;
     value:any;
     title:string;
   }
