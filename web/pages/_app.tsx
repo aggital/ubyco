@@ -1,7 +1,17 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+import React, {FC} from "react";
+import 'bootstrap/dist/css/bootstrap.css'
+interface App{
+  Component: any;
+  pageProps: any;
 }
-export default MyApp
+const MyApp:FC<App>= ({ Component, pageProps }) => {
+  const Layout = Component.Layout ? Component.Layout : React.Fragment;
+
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  )
+}
+
+export default MyApp;
