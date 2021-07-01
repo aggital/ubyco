@@ -60,8 +60,8 @@ function Users() {
                   field: "fullname",
                 },
                 { title: "Customer ID", field: "customer_id" },
-                { title: "Phone", field: "phone", type: "numeric" },
-                { title: "Available Amount", field: "amount", type: "numeric" },
+                { title: "Phone", field: "phone" },
+                { title: "Available Amount", field: "amount"},
               ]}
               data={data}
               title=""
