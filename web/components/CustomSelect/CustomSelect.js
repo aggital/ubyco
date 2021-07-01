@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
+import Select from '@material-ui/core/Select';
 // @material-ui/icons
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
@@ -20,10 +21,11 @@ export default function CustomSelect(props) {
     labelText,
     id,
     labelProps,
-    selectProps,
+    onChange,
     value,
     error,
     success,
+    item,
   } = props;
 
   const labelClasses = classNames({
@@ -52,15 +54,19 @@ export default function CustomSelect(props) {
           {labelText}
         </InputLabel>
       ) : null}
-      <Input
-        classes={{
-          root: marginTop,
-          disabled: classes.disabled,
-          underline: underlineClasses,
-        }}
-        id={id}
-        {...inputProps}
-      />
+     <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={value}
+          onChange={onchange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {item.map(obj => 
+            <MenuItem key={obj.id} value={obj.value} >{obj.value.toString()}</MenuItem>
+           )}
+        </Select>
       {error ? (
         <Clear className={classes.feedback + " " + classes.labelRootError} />
       ) : success ? (

@@ -6,7 +6,7 @@ import {
     defaultFont,
   } from "assets/jss/nextjs-material-dashboard.js";
   
-  const customInputStyle = {
+  const customSelectStyle = {
     disabled: {
       "&:before": {
         backgroundColor: "transparent !important",
@@ -67,5 +67,5 @@ import {
     },
   };
   
-  export default customInputStyle;
+  export default customSelectStyle;
   
