@@ -16,7 +16,7 @@ export default function CustomSelect(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const {
-    formControlPropsed,
+    formControlProps,
     labelText,
     id,
     labelProps,
