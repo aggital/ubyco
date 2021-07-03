@@ -103,7 +103,7 @@ function GiftCard() {
                 { title: "Brand", field: "brand"},
                 { title: "Card", field: "card"},
 
-                { title: "Amount", field: "amount", type: "numeric" },
+                { title: "Amount", field: "amount"},
               ]}
               data={data}
               title=""
