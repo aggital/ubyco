@@ -25,29 +25,27 @@ import MaterialTable from "material-table";
 
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 
-function GiftCard() {
+function Crypto() {
   const [data, setData] = useState([
     { 
       id:1,
       fullname: "oyewo oluwafemi", 
       customer_id: "1012321232",
-      brand: 'Apple',
-      card: 'Itunes 100 - 200',
+      brand: 'Btc',
       amount: 2000,
     },
     { 
       id: 2,
       fullname: "Olaiya Ajao", 
       customer_id: "1012321232",
-      brand: 'Google',
-      card: 'Google Play',
+      brand: 'Litecoin',
       amount: 2020,
     },
     { 
       id:3,
       fullname: "Oghogho Zino", 
       customer_id: "1012321232",
-      phone: '08034605723',
+      brand: 'DodgeCoin',
       amount: 2000,
     },
   ]);
@@ -62,7 +60,7 @@ function GiftCard() {
               <Button
                 fullWidth
                 color="info"
-                onClick={() => Router.push("/admin/giftcard/rate")}
+                onClick={() => Router.push("/admin/crypto/rate")}
               >
                 Rate
               </Button>
@@ -84,13 +82,13 @@ function GiftCard() {
         </GridItem>
        </GridContainer>
 
-      {/* Gift Cards Trade */}
+      {/* Crypto Cards Trade */}
 
       <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="danger">
-            <h4 className={classes.cardTitleWhite}>Gift Card Transaction</h4>
+            <h4 className={classes.cardTitleWhite}>Crypto Trade Transaction</h4>
           </CardHeader>
           <CardBody>
             <MaterialTable
@@ -101,8 +99,6 @@ function GiftCard() {
                 },
                 { title: "Customer ID", field: "customer_id" },
                 { title: "Brand", field: "brand"},
-                { title: "Card", field: "card"},
-
                 { title: "Amount", field: "amount"},
               ]}
               data={data}
@@ -111,7 +107,7 @@ function GiftCard() {
                 {
                   icon: 'visibility',
                   tooltip: 'View Trade',
-                  onClick: (event, rowData) => {Router.push(`/admin/giftcard/${rowData.id}`)}
+                  onClick: (event, rowData) => {Router.push(`/admin/crypto/${rowData.id}`)}
                 },
               ]}
               options={{
@@ -128,6 +124,6 @@ function GiftCard() {
   );
 }
 
-GiftCard.layout = Admin;
+Crypto.layout = Admin;
 
-export default GiftCard;
+export default Crypto;

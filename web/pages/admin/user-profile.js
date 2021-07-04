@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -8,6 +8,7 @@ import Admin from "layouts/Admin.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import CustomSelect from "components/CustomSelect/CustomSelect.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -39,6 +40,16 @@ const styles = {
 function UserProfile() {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
+  const [data, setData] = useState("");
+  const list = [
+    {id: 1, value:'Btc'},
+    {id: 2, value:'Litecoin'},
+  ];
+
+  const handleChange = (event) => {
+    //const name = event.target.name;
+    setData(event.target.value);
+  };
   return (
     <div>
       <GridContainer>
@@ -83,12 +94,15 @@ function UserProfile() {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="First Name"
-                    id="first-name"
+                  <CustomSelect 
+                    labelText='Select A Card'
+                    value={data}
+                    onChange={handleChange}
+                   item = {list}
                     formControlProps={{
                       fullWidth: true,
                     }}
+                    error
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>

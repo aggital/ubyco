@@ -43,12 +43,12 @@ function Rate() {
   const classes = useStyles();
   const [data, setData] = useState("");
   const [card, setCard] = useState([
-    { id: 1, brand: 1, card: "Itunes Card 100", rate: "350" },
-    { id: 2, brand: 2, card: "Vanilla 300", rate: "450" },
+    { id: 1, brand: 1,  rate: "350" },
+    { id: 2, brand: 2, rate: "450" },
   ]);
   const [brand, setBrand] = useState([
-    { id: 1, brand: "Apple", count: 5},
-    { id: 2, brand: "Vanila", count: 6},
+    { id: 1, brand: "Bitcoin"},
+    { id: 2, brand: "Litecoin"},
   ]);
   const list = [
     { id: 1, value: "Btc" },
@@ -65,18 +65,17 @@ function Rate() {
         <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Gift Card Rate</h4>
-              <p className={classes.cardCategoryWhite}>List of Gift Card Rate</p>
+              <h4 className={classes.cardTitleWhite}>Crypto Rate</h4>
+              <p className={classes.cardCategoryWhite}>List of Crypto Rate</p>
             </CardHeader>
             <CardBody>
               <MaterialTable
                 columns={[
                   {
-                    title: "Card Brand",
+                    title: "Coin Brand",
                     field: "brand",
-                    lookup: { 1: 'Apple', 2: 'Vanilla'}
+                    lookup: { 1: 'Bitcoin', 2: 'Litecoin'}
                   },
-                  { title: "Card", field: "card" },
                   { title: "Rate", field: "rate" },
                 ]}
                 data={card}
@@ -122,8 +121,8 @@ function Rate() {
         <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="warning">
-              <h4 className={classes.cardTitleWhite}>Card Brand</h4>
-              <p className={classes.cardCategoryWhite}>List of Card brands</p>
+              <h4 className={classes.cardTitleWhite}>Crypto Brand</h4>
+              <p className={classes.cardCategoryWhite}>List of Crypto brands</p>
             </CardHeader>
             <CardBody>
               <MaterialTable

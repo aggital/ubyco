@@ -20,28 +20,31 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 
-function Users() {
+function WithDrawal() {
   const [data, setData] = useState([
     { 
       fullname: "oyewo oluwafemi", 
       customer_id: "1012321232",
       phone: '08034605723',
+      withdrawal_amount: 500,
+      status: 1,
       amount: 2000,
-      status: 1
     },
     { 
       fullname: "Olaiya Ajao", 
       customer_id: "1012321232",
       phone: '08034605723',
+      withdrawal_amount: 700,
+      status: 1,
       amount: 2000,
-      status: 1
     },
     { 
       fullname: "Oghogho Zino", 
       customer_id: "1012321232",
       phone: '08034605723',
+      status: 1,
+      withdrawal_amount: 600,
       amount: 2000,
-      status: 1
     },
   ]);
   const useStyles = makeStyles(styles);
@@ -50,9 +53,8 @@ function Users() {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="danger">
-            <h4 className={classes.cardTitleWhite}>Users</h4>
-            <p className={classes.cardCategoryWhite}>Last Updated 2 days ago</p>
+          <CardHeader color="success">
+            <h4 className={classes.cardTitleWhite}>User Withdrawal request</h4>
           </CardHeader>
           <CardBody>
             <MaterialTable
@@ -60,46 +62,30 @@ function Users() {
                 {
                   title: "Name",
                   field: "fullname",
-
+                  editable: 'never',
                 },
-                { title: "Customer ID", field: "customer_id" },
-                { title: "Phone", field: "phone" },
-                {title: "Status", field: "status", lookup:{1: "Active", 2:"Banned"}},
-                { title: "Available Amount", field: "amount"},
+                { title: "Customer ID", field: "customer_id",editable: 'never', },
+                { title: "Phone", field: "phone", editable: 'never', },
+                { title: "Available Amount", field: "amount", editable: 'never',},
+                {title: "Withdraw Request", field:'withdrawal_amount', editable: 'never',},
+                {title: "status", field:"status", lookup:{1:"pending", 2:"processing", 3:"success"}}
               ]}
               data={data}
               title=""
               editable={{
-                // onRowAdd: newData =>
-                //   new Promise((resolve, reject) => {
-                //     setTimeout(() => {
-                //       setBrand([...brand, newData]);
-                      
-                //       resolve();
-                //     }, 1000)
-                //   }),
                 onRowUpdate: (newData, oldData) =>
                   new Promise((resolve, reject) => {
                     setTimeout(() => {
-                      const dataUpdate = [...brand];
+                      const dataUpdate = [...data];
                       const index = oldData.tableData.id;
                       dataUpdate[index] = newData;
-                      setBrand([...dataUpdate]);
+                      setData([...dataUpdate]);
         
                       resolve();
                     }, 1000)
                   }),
-                onRowDelete: oldData =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataDelete = [...brand];
-                      const index = oldData.tableData.id;
-                      dataDelete.splice(index, 1);
-                      setBrand([...dataDelete]);
-                      resolve()
-                    }, 1000)
-                  }),
               }}
+             
               options={{
                 actionsColumnIndex: -1
               }}
@@ -121,6 +107,6 @@ function Users() {
   );
 }
 
-Users.layout = Admin;
+WithDrawal.layout = Admin;
 
-export default Users;
+export default WithDrawal;

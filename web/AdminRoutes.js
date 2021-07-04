@@ -24,7 +24,8 @@ import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import{ BiBitcoin }from 'react-icons/bi';
-import Unarchive from "@material-ui/icons/Unarchive";
+import {FaBank, FaBitcoin, FaPiggyBank} from 'react-icons/fa';
+import {FiMessageCircle, FiSettings} from 'react-icons/fi'
 import Language from "@material-ui/icons/Language";
 
 const dashboardRoutes = [
@@ -48,48 +49,49 @@ const dashboardRoutes = [
     icon: Redeem,
     layout: "/admin",
   },
-  {
-    path: "/404",
-    name: "Crypto",
-    icon: BiBitcoin,
-    layout: "/admin",
-  },
-  // {
-  //   path: "/user-profile",
-  //   name: "Gift Cards",
-  //   icon: Redeem,
-  //   layout: "/admin",
-  // },
 
   {
-    path: "/table-list",
-    name: "Table List",
-    icon: "content_paste",
+    path: "/crypto",
+    name: "Crypto",
+    icon: FaBitcoin,
+    layout: "/admin",
+  },
+
+  {
+    path: "/withdrawal",
+    name: "Withdrawal",
+    icon: FaPiggyBank,
     layout: "/admin",
   },
   {
     path: "/typography",
-    name: "Typography",
-    icon: LibraryBooks,
-
+    name: "Message",
+    icon: FiMessageCircle,
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    rtlName: "الرموز",
-    icon: BubbleChart,
-
+    path: "/table-list",
+    name: "Setting",
+    icon: FiSettings,
     layout: "/admin",
   },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: LocationOn,
+ 
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   rtlName: "الرموز",
+  //   icon: BubbleChart,
 
-    layout: "/admin",
-  },
-  {
+  //   layout: "/admin",
+  // },
+  // {
+  //   path: "/maps",
+  //   name: "Maps",
+  //   icon: LocationOn,
+
+  //   layout: "/admin",
+  // },
+   {
     path: "/notifications",
     name: "Notifications",
     icon: Notifications,
