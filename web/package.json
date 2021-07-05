@@ -10,6 +10,7 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && rm -rf .next/ && npm install && npm run dev"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^28.0.0",
     "@material-ui/core": "4.11.3",
     "@material-ui/icons": "4.11.2",
     "@zeit/next-css": "1.0.1",
@@ -28,7 +29,8 @@
     "react-chartist": "0.14.3",
     "react-dom": "17.0.1",
     "react-icons": "^4.2.0",
-    "react-swipeable-views": "0.13.9"
+    "react-swipeable-views": "0.13.9",
+    "react-web-gifted-chat": "^0.6.7"
   },
   "eslintConfig": {
     "extends": "react-app"
