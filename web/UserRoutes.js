@@ -52,16 +52,16 @@ const dashboardRoutes = [
     layout: "/user",
   },
   {
-    path: "/404",
+    path: "/withdraw",
     name: "Withdraw",
     icon: BiBitcoin,
-    layout: "/admin",
+    layout: "/user",
   },
   {
     path: "/notifications",
     name: "Notifications",
     icon: Notifications,
-    layout: "/admin",
+    layout: "/user",
   },
 ];
 
