@@ -8,6 +8,9 @@ export default class StatusSeeder extends BaseSeeder {
         name:  'pending'
       },
       {
+        name:  'processing'
+      },
+      {
         name:  'incomplete'
       },
       {

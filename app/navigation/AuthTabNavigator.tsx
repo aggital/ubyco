@@ -10,6 +10,7 @@
  import LoginScreen from '../screens/Auth/LoginScreen';
  import SignUpScreen from '../screens/Auth/SignUpScreen';
  import VerifyScreen from '../screens/Auth/VerifyScreen'
+ import SplashScreen from '../screens/Splash/SplashScreen'
  import { AuthTabParamList, AuthParamList} from '../types';
  
  const AuthTab = createStackNavigator<AuthTabParamList>();
@@ -17,8 +18,15 @@
  export default function AuthTabNavigator() {
   return (
      <AuthTab.Navigator
-       initialRouteName="Login"
+       initialRouteName="Splash"
       >
+         <AuthTab.Screen
+         name="Splash"
+         component={SplashNavigator}
+         options={{
+           headerShown: false
+          }}
+       />
        <AuthTab.Screen
          name="Login"
          component={LoginNavigator}
@@ -49,6 +57,20 @@
  // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
  const AuthStack = createStackNavigator<AuthParamList>();
  
+ function SplashNavigator() {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{
+         headerShown: false
+       }}
+      />
+    </AuthStack.Navigator>
+  );
+}
+
  function LoginNavigator() {
    return (
      <AuthStack.Navigator>

@@ -76,7 +76,7 @@ export default class User extends BaseModel {
   @hasOne(()=>UserAmount, {
     foreignKey: 'user_id'
   })
-  public wallet: HasOne<typeof UserAmount>
+  public userAmount: HasOne<typeof UserAmount>
 
 
   @hasMany(()=>CardTransaction, {

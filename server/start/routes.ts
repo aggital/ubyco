@@ -21,18 +21,22 @@
 // import { Router } from '@adonisjs/http-server/build/standalone'
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.get('/', () => {
+    return 'Hello world'
+  });
+
 //Authentication / General route
 Route.post('register', 'AuthController.register')
 Route.put('verify', 'AuthController.verify')
 Route.post('login', 'AuthController.login')
 Route.post('logout', 'AuthController.logout')
 Route.put('forget', 'AuthController.forget')
-Route.get('/', 'AuthController.index').middleware('auth')
+// Route.get('/', 'AuthController.index').middleware('auth')
 Route.get('/list-banks', 'UserController.listBanks')
 
 // user route
 Route.group(() => {
-    Route.get('/profile', 'UserController.getProfile')
+    Route.get('/', 'UserController.getProfile')
     Route.put('/profile', 'UserController.updateProfile')
     Route.get('/get-account', 'UserController.getAccount')
     Route.get('/get-account-name', 'UserController.getAccountName')

@@ -38,3 +38,10 @@ export type HomeParamList = {
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
 };
+
+export type AuthContextParamList = {
+  email: string;
+  phone: number;
+  fullname: string;
+  password: string;
+}

@@ -14,6 +14,7 @@ export default class UsersController {
     public async getProfile({response, auth}){
         try {
             const user = await auth.user;
+            await user?.load('userAmount')
            return response.send({message: user})
         } catch (error) {
             console.log(error)
@@ -147,6 +148,7 @@ export default class UsersController {
     public async card({response}){
         try {
             const card = await Card.all()
+            // await user?.load('userAmount')
             return response.send({message: card})
         } catch (error) {
             return response.badRequest(error)
