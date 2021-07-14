@@ -134,8 +134,7 @@ const resetPassword = dispatch => {
 const checkToken = dispatch => {
     return async() => {
         const token = await AsyncStorage.getItem('token')
-        token ?  dispatch({ type: 'sign_in' });
-       
+        token ?  dispatch({ type: 'login' }) : null ;
     }
 };
 
