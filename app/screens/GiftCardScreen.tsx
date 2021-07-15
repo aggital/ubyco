@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions, Platform } from 'react-native';
 import { Text, View, FlatList } from 'react-native';
 import * as Element from 'react-native-elements'
 import Picker from '../components/Picker'
@@ -9,59 +9,100 @@ import Header from '../components/theme/Header'
 import RandomInput from '../components/RandomInput';
 import Button from '../components/Button'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import * as ImagePicker from 'expo-image-picker';
+
 import { Context as Home } from '../context/HomeContext'
 
 
 
 
+
+function useDidUpdate (callback, deps) {
+  const hasMount = React.useRef(false)
+  React.useEffect(() => {
+    if (hasMount.current) {
+      callback()
+    } else {
+      hasMount.current = true
+    }
+  }, deps)
+}
+
+
 export default function GiftCardScreen({ navigation }) {
+ //image state
+  const [image, setImage] = React.useState(null);
+
+//cardbrand and card type state to hold context api data state
   const [brand, setBrand] = React.useState([]);
   const [type, setType] = React.useState([]);
 
+//card and type selected value
   const [brandValue, setBrandValue] = React.useState("");
   const [typeValue, setTypeValue] = React.useState("");
 
-  const [price, setPrice] = React.useState('');
+//amount state
+  const [amount, setAmount] = React.useState('');
+
+//total state
   const [total, setTotal] = React.useState('');
   const { state, getCard, cardType } = React.useContext(Home);
 
-  const shows = state.card != null ? state.card : 'loading'
+// data coming Context Api State
+  const cards = state.card
+  const cardTypes = state.card_type
 
-  //fetch cards function
-  const getData = React.useCallback(() => {
-    setBrand(shows.map((element) => ({ key: element.id, label: element.name, value: element.name })));
+//fetch cards function
+  const getCards = React.useCallback(() => {
+    if(cards){
+      setBrand(cards.map((element) => ({ key: element.id, label: element.name, value: element.name })));
+    }
   }, [])
 
-  //let card be available onMount
+  //fecth cards on render
   React.useEffect(() => {
-    getData()
-  }, [getData]);
+    getCards()
+  }, [getCards]);
+
+  //when a card is selected
+  const onBrandSelect =  async(event) => {
+    setBrandValue(event);
+    await cardType(event, ()=>{
+      if (cardTypes){
+        setType(cardTypes.map((element) => ({ key: element.id, label: element.name, value: element.name })));
+      }
+    })
+  };
 
   //on select card brand, run this function
-  const onBrandSelect = async (event) =>{
-    setBrandValue(event);
-   setType([])
-    let data;
-    brand !== null || undefined ? data = brand.find(element => element.value ===  event) : []
-    const key =  data.key //am not suppose to do this, and i will change you once i got what i want
-
-    console.log(key)
-    // Call to context api to fetch related cards
-       await cardType(key, () => {
-       setType(state.card_type.map((element) => ({ key: element.id, label: element.name, value: element.name })))
-       setTotal(state.card_type.rate)
-        
-    })
-  }
-
-  const onTypeSelect = async (value) =>{
+  const onTypeSelect = (value) =>{
     setTypeValue(value);
-    const tal = Number(price) * 300
-    setTotal(`${tal}`)
-    
   }
 
-  console.log(state.card_type)
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      // allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  let id;
+  const priceChange = (value) =>{
+    setAmount(value)
+    const tot = Number(amount) * Number(`${state.card_type[0].rate}`)
+    setTotal(`${tot}`)
+  }
+ 
+  
+ 
 
   return (
     <SafeAreaView style={{ backgroundColor: '#f9e8ef', flex: 1 }}>
@@ -84,7 +125,6 @@ export default function GiftCardScreen({ navigation }) {
               items={brand}
               value={brandValue}
               onValueChange={(event) => onBrandSelect(event)}
-              itemKey={brand.key}
               require='*'
             />
             <View
@@ -110,11 +150,12 @@ export default function GiftCardScreen({ navigation }) {
             />
 
             <RandomInput
-              title='Price'
+              title='Amount'
               placeholder='$'
-              value={price.toString()}
-              onChangeText={setPrice}
+              value={amount}
+              onChangeText={(value)=>priceChange(value)}
               keyType='phone-pad'
+             // ref={amountRef}
             />
 
             <View
@@ -131,6 +172,7 @@ export default function GiftCardScreen({ navigation }) {
               onChangeText={setTotal}
               disable
               keyType='default'
+             // ref={totalRef}
             />
 
             <View
@@ -145,7 +187,7 @@ export default function GiftCardScreen({ navigation }) {
               titleStyle={{ alignSelf: 'flex-end', color: 'black' }}
               buttonStyle={{ borderRadius: 40, borderColor: 'red', }}
               containerStyle={{ margin: 20, height: 40, borderColor: 'red' }}
-              onPress={() => console.log('somthing should be done')}
+              onPress={pickImage}
               type="outline"
               icon={
                 <Element.Icon
@@ -157,6 +199,8 @@ export default function GiftCardScreen({ navigation }) {
                 />
               }
             />
+
+            {image && <Element.Image source={{ uri: image }} style={{ width: 50, height: 50 }} />}
 
 
             <Element.Input
@@ -172,6 +216,7 @@ export default function GiftCardScreen({ navigation }) {
                 padding: 7
               }}
               multiline={true}
+             // ref={commentRef}
 
             />
             <View style={{ marginTop: 10 }}>
@@ -179,6 +224,7 @@ export default function GiftCardScreen({ navigation }) {
             </View>
 
           </View>
+         
 
         
       </KeyboardAwareScrollView>

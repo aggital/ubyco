@@ -84,7 +84,7 @@ function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Available Balance</p>
               <h3 className={classes.cardTitle}>
-              $200
+              &#8358;200
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -106,7 +106,7 @@ function Dashboard() {
                <BiBitcoin/>
               </CardIcon>
               <p className={classes.cardCategory}>Crypto Trades</p>
-              <h3 className={classes.cardTitle}>$0</h3>
+              <h3 className={classes.cardTitle}>&#8358;0</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -123,7 +123,7 @@ function Dashboard() {
                <MdCardGiftcard/>
               </CardIcon>
               <p className={classes.cardCategory}>Gift Card Trades</p>
-              <h3 className={classes.cardTitle}>$5</h3>
+              <h3 className={classes.cardTitle}>&#8358;5</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>

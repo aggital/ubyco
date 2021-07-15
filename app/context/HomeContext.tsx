@@ -66,9 +66,12 @@ const cardType = dispatch => {
     return async (value, callback) => {
         try {
             const token = await AsyncStorage.getItem('token')
-            const response = await Server.get(`/user/card-type?id=${value}`, {
+            const response = await Server.get(`/user/card-type`, {
                 headers: {
                     'Authorization' : `Bearer ${token}`
+                },
+                params:{
+                    'name': `${value}`
                 }
               });
             dispatch({ type: 'card_type', payload: response.data.message})

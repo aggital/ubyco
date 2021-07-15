@@ -4,5 +4,4 @@ Giftcards and Bitcoin trading application - web &amp; mobile
 |
 |----server
 |----app
-|----admin
-|-----website
+|----web (website, user dashboard and admin dashboard)
