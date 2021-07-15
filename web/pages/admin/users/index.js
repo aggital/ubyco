@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MaterialTable from "material-table";
+import Router from "next/router";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,6 +24,7 @@ import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js
 function Users() {
   const [data, setData] = useState([
     { 
+      id:1,
       fullname: "oyewo oluwafemi", 
       customer_id: "1012321232",
       phone: '08034605723',
@@ -30,6 +32,7 @@ function Users() {
       status: 1
     },
     { 
+      id:2,
       fullname: "Olaiya Ajao", 
       customer_id: "1012321232",
       phone: '08034605723',
@@ -37,6 +40,7 @@ function Users() {
       status: 1
     },
     { 
+      id:3,
       fullname: "Oghogho Zino", 
       customer_id: "1012321232",
       phone: '08034605723',
@@ -60,46 +64,36 @@ function Users() {
                 {
                   title: "Name",
                   field: "fullname",
+                  editable: 'never',
 
                 },
-                { title: "Customer ID", field: "customer_id" },
-                { title: "Phone", field: "phone" },
+                { title: "Customer ID", field: "customer_id", editable: 'never' },
+                { title: "Phone", field: "phone", editable: 'never' },
                 {title: "Status", field: "status", lookup:{1: "Active", 2:"Banned"}},
-                { title: "Available Amount", field: "amount"},
+                { title: "Available Amount", field: "amount", editable: 'never'},
               ]}
               data={data}
               title=""
               editable={{
-                // onRowAdd: newData =>
-                //   new Promise((resolve, reject) => {
-                //     setTimeout(() => {
-                //       setBrand([...brand, newData]);
-                      
-                //       resolve();
-                //     }, 1000)
-                //   }),
                 onRowUpdate: (newData, oldData) =>
                   new Promise((resolve, reject) => {
                     setTimeout(() => {
-                      const dataUpdate = [...brand];
+                      const dataUpdate = [...data];
                       const index = oldData.tableData.id;
                       dataUpdate[index] = newData;
-                      setBrand([...dataUpdate]);
+                      setData([...dataUpdate]);
         
                       resolve();
                     }, 1000)
                   }),
-                onRowDelete: oldData =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataDelete = [...brand];
-                      const index = oldData.tableData.id;
-                      dataDelete.splice(index, 1);
-                      setBrand([...dataDelete]);
-                      resolve()
-                    }, 1000)
-                  }),
               }}
+              actions= {[
+                {
+                  icon: 'visibility',
+                  tooltip: 'View User',
+                  onClick: (event, rowData) => Router.push(`/admin/users/${rowData.id}`)
+                }
+              ]}
               options={{
                 actionsColumnIndex: -1
               }}

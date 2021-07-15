@@ -64,7 +64,7 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/typography",
+    path: "/message",
     name: "Message",
     icon: FiMessageCircle,
     layout: "/admin",

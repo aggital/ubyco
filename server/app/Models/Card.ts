@@ -13,6 +13,9 @@ export default class Card extends BaseModel {
   @column()
   public name: string
 
+  @column()
+  public image: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

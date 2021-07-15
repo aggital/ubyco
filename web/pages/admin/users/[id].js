@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import {useRouter} from 'next/router'
+import Router from "next/router";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -40,6 +42,10 @@ const styles = {
 function UserProfile() {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
+
+  const router = useRouter();
+  const query = router.query.id;
+
   const [data, setData] = useState("");
   const list = [
     {id: 1, value:'Btc'},
@@ -80,6 +86,7 @@ function UserProfile() {
                     formControlProps={{
                       fullWidth: true,
                     }}
+                    value="Oyewo"
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>

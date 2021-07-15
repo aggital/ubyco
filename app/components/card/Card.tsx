@@ -7,7 +7,7 @@ const Card = ({id,amount, ...otherProps}) => {
         <View style={styles.container}>
             <Element.Text style={styles.balanceText}>Available Balance</Element.Text>
             <Element.Text style={styles.idText}>ID: {id}</Element.Text>
-            <Element.Text style={styles.idText}>N{amount}</Element.Text>
+            <Element.Text style={styles.idText}>&#8358; {amount}</Element.Text>
         </View>
     )
 }
@@ -26,12 +26,12 @@ const styles = StyleSheet.create({
         shadowColor:'red'
     },
     balanceText:{
-        color: '#333333', 
+        color: '#fff', 
         fontSize: 20,
         padding: 10,
     },
     idText:{
-        color: '#333333', 
+        color: '#fff', 
         fontSize: 18,
         padding: 10,
     },

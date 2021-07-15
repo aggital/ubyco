@@ -5,7 +5,7 @@ import * as Element from 'react-native-elements'
 
 interface Props {
    title: string;
-   onPress: any;
+   onPress: undefined;
 }
 const Button: FC<Props> = ({title, onPress}) => {
     return (

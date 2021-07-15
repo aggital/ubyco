@@ -10,6 +10,7 @@ interface Props {
     type:string;
     value:any;
     icon:string;
+
   }
 
 const Input: FC<Props> = ({icon, value, onChangeText, placeholder, type, keyType,secureTextEntry}) => {
@@ -24,11 +25,12 @@ const Input: FC<Props> = ({icon, value, onChangeText, placeholder, type, keyType
                     name={icon}
                     size={24}
                     color='#333333'
+                    // onPress={iconPressed}
                     />
                 }
                 leftIconContainerStyle={{marginLeft:15}}
                 errorStyle={{color: '#f63757' }}
-                // errorMessage= 'something is worng'
+                errorMessage= 'something is worng'
                 value={value}
                 onChangeText={onChangeText}
                 autoCapitalize='none'

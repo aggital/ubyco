@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/Navbars/Navbar.js";
 import Footer from "components/Footer/Footer.js";
@@ -47,7 +47,7 @@ export default function User({ children, ...rest }) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return router.pathname !== "/admin/maps";
+    return router.pathname !== "/user/";
   };
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {

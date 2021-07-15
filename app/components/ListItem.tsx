@@ -2,14 +2,14 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import * as Elements from 'react-native-elements'
 
-const ListItem = ({name, rate}) => {
+const ListItem = ({name, rate, image}) => {
     return (
         <View style={styles.container}>
            <Elements.Avatar
                 rounded
                 source={{
                     uri:
-                    'https://giftpass.co/pub/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/i/t/itunes-gift-card-pile-600.png',
+                    `${image}`,
                 }}
                 containerStyle={{margin: 10}}
             />

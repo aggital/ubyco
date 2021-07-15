@@ -64,7 +64,7 @@ function WithDrawal() {
                   field: "fullname",
                   editable: 'never',
                 },
-                { title: "Customer ID", field: "customer_id",editable: 'never', },
+                { title: "Customer ID", field: "customer_id", editable: 'never', },
                 { title: "Phone", field: "phone", editable: 'never', },
                 { title: "Available Amount", field: "amount", editable: 'never',},
                 {title: "Withdraw Request", field:'withdrawal_amount', editable: 'never',},
