@@ -23,9 +23,6 @@ import Admin from "layouts/Admin.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
-// import Tasks from "components/Tasks/Tasks.js";
-// import CustomTabs from "components/CustomTabs/CustomTabs.js";
-// import Danger from "components/Typography/Danger.js";
 import Success from "components/Typography/Success.js"
 import Card from "components/Card/Card.js";
 
@@ -80,7 +77,7 @@ function Dashboard() {
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Revenue</p>
-              <h3 className={classes.cardTitle}>$34,245</h3>
+              <h3 className={classes.cardTitle}>&#8358; 34,245</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>

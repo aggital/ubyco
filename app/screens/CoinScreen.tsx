@@ -78,7 +78,7 @@ export default function CoinScreen() {
             
           <Picker 
               title="Coin" 
-              placeholder="Select A Card Brand" 
+              placeholder="Select A Coin Brand" 
               items={coin}
               value={`${value}`}
               onValueChange = {(value) => setValue(value)}

@@ -52,6 +52,8 @@ const  HomeScreen = ({navigation}) =>{
   const [card, setCard] = React.useState([])
   const {state, getUser, getCard} = React.useContext(Home);
 
+ 
+
 
   const fetchUser = async() => {
     let res = await getUser()
@@ -68,14 +70,7 @@ const  HomeScreen = ({navigation}) =>{
     fetchCard()
    },[]);
 
-   console.log(state.card)
- 
-
-
-
-
-
-  return (
+   return (
     <SafeAreaView style={{backgroundColor:'#f9e8ef', flex: 1}} >
         <View>
             <Header/>

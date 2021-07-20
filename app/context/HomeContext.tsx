@@ -9,6 +9,8 @@ const homeReducer = (state, action) => {
             return { ...state, user: action.payload };
         case 'get_card':
                 return { ...state, card: action.payload };
+        case 'card_type': 
+                return {...state, card_type: action.payload}
         case 'add_error':
             return {...state, errorMessage: action.payload}
         default:
@@ -60,11 +62,34 @@ const getCard = dispatch => {
     }
 };
 
+const cardType = dispatch => {
+    return async (value, callback) => {
+        try {
+            const token = await AsyncStorage.getItem('token')
+            const response = await Server.get(`/user/card-type`, {
+                headers: {
+                    'Authorization' : `Bearer ${token}`
+                },
+                params:{
+                    'name': `${value}`
+                }
+              });
+            dispatch({ type: 'card_type', payload: response.data.message})
+            callback()
+           
+        }
+        catch (err) {
+            dispatch({ type: 'add_error', payload: "Network error" })
+        }
+    }
+
+}
+
 
 
 
 
 export const { Context, Provider } = createDataContext(homeReducer,
     {
-         clearMessage, getUser,getCard
-    }, { errorMessage: '', user:'', message: '', card:'' })
+         clearMessage, getUser,getCard,cardType
+    }, { errorMessage: '', user:'', message: '', card:'', card_type:'' })

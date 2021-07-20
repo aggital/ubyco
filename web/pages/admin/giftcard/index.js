@@ -30,25 +30,29 @@ function GiftCard() {
     { 
       id:1,
       fullname: "oyewo oluwafemi", 
-      customer_id: "1012321232",
+      customer_id: "CUS_ochmt6zibhgqd5n",
       brand: 'Apple',
       card: 'Itunes 100 - 200',
       amount: 2000,
+      status: 1
     },
     { 
       id: 2,
-      fullname: "Olaiya Ajao", 
-      customer_id: "1012321232",
+      fullname: "Aderemi Ayomide", 
+      customer_id: "CUS_9qx8fmlogixuz10",
       brand: 'Google',
       card: 'Google Play',
       amount: 2020,
+      status: 1
     },
     { 
       id:3,
-      fullname: "Oghogho Zino", 
-      customer_id: "1012321232",
-      phone: '08034605723',
-      amount: 2000,
+      fullname: "Test one", 
+      customer_id: "CUS_gamdn1ryrlk1msa",
+      brand: 'Google',
+      card: 'Google Play',
+      amount: 2050,
+      status: 1
     },
   ]);
   const useStyles = makeStyles(styles);
@@ -98,14 +102,29 @@ function GiftCard() {
                 {
                   title: "Name",
                   field: "fullname",
+                  editable: "never"
                 },
-                { title: "Customer ID", field: "customer_id" },
-                { title: "Brand", field: "brand"},
-                { title: "Card", field: "card"},
+                { title: "Customer ID", field: "customer_id", editable: "never" },
+                { title: "Brand", field: "brand", editable: "never"},
+                { title: "Card", field: "card", editable: "never"},
 
-                { title: "Amount", field: "amount"},
+                { title: "Amount", field: "amount", editable: "never"},
+                { title: "status", field:"status",lookup:{1: "Processing", 2:"Flaged", 3: "Completed"}},
               ]}
               data={data}
+              editable={{
+                onRowUpdate: (newData, oldData) =>
+                  new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                      const dataUpdate = [...data];
+                      const index = oldData.tableData.id;
+                      dataUpdate[index] = newData;
+                      setData([...dataUpdate]);
+        
+                      resolve();
+                    }, 1000)
+                  }),
+              }}
               title=""
               actions={[
                 {

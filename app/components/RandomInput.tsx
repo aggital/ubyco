@@ -4,7 +4,7 @@ import * as Element from 'react-native-elements'
 
 interface Props {
     placeholder: any;
-    onChangeText: (text: string) => void;
+    onChangeText: any;
     secureTextEntry?: boolean;
     disable?: boolean;
     keyType: any;

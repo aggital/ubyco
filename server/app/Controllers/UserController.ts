@@ -158,9 +158,7 @@ export default class UsersController {
 
     public async cardType({request,response}){
         const data = schema.create({
-            id: schema.number([
-                rules.required()
-            ])
+            name: schema.string()
         });
 
         try {
@@ -170,7 +168,7 @@ export default class UsersController {
                     required: 'The {{ field }} is required',
                     }
             })
-            const card : any= await Card.findBy('id', payload.id) 
+            const card : any= await Card.findBy('name', payload.name) 
             await card.load('cardTypes')
             return response.send({message: card?.cardTypes})
         } catch (error) {

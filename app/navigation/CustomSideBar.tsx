@@ -8,17 +8,34 @@ import {
 } from 'react-native';
 import * as Element from 'react-native-elements'
 
+import { Context as AuthContext } from '../context/AuthContext'
+import { Context as HomeContext } from '../context/HomeContext'
+
+import { useNavigation } from '@react-navigation/core';
+
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import Navigation from '.';
 
 interface Props {
     orientation: string;
 }
 
 const CustomSideBar = (props: Props) => {
+  const navigation = useNavigation();
+  const {Logout} = React.useContext(AuthContext);
+  const {state} = React.useContext(HomeContext);
+
+  const logout = async () => {
+    await Logout(() => {
+        console.log('something fisshy')
+        navigation.navigate('Login')
+    })
+};
+
   return (
     <SafeAreaView style={{flex: 1}}>
       {/*Top Large Image */}
@@ -36,10 +53,10 @@ const CustomSideBar = (props: Props) => {
         />
             <View>
                 <Element.Text style={styles.profileName}>
-                    Oyewo Oluwafemi
+                   {state.user.fullname}
                 </Element.Text>
                 <Element.Text style={styles.customer_id}>
-                    1234-454-00
+                {state.user.customer_id}
                 </Element.Text>
             </View>
         </View>
@@ -48,7 +65,7 @@ const CustomSideBar = (props: Props) => {
            Available Balance
         </Element.Text>
         <Element.Text h4 style={{color:'white', fontWeight:'bold'}}>
-           N 200,000
+           N {state.user.userAmount != null ? state.user.userAmount.amount : 'pending'}
         </Element.Text>
         <Element.Button
         icon={
@@ -77,9 +94,22 @@ const CustomSideBar = (props: Props) => {
             <Element.Icon 
                 color={"#f63757"} 
                 size= {24}
-                name={focused ? 'home' : 'home'}/>
+                name={focused ? 'info' : 'info'}/>
         }
         onPress={() => alert('Link to help')} />
+      
+
+    <DrawerItem
+        label="Logout"
+        icon={({ focused, color, size }) => 
+            <Element.Icon 
+                color={"#f63757"} 
+                size= {24}
+                type= 'font-awesome'
+                name={focused ? 'sign-out' : 'sign-out'}/>
+        }
+        onPress={logout} 
+      />
       </DrawerContentScrollView>
       <View style={styles.footer}>
         <Element.Text

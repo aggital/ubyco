@@ -125,22 +125,22 @@ const verify = dispatch => {
     }
 };
 
-const resetPassword = dispatch => {
-    return () => {
-        dispatch({ type: 'reset' });
+const Logout = dispatch => {
+    return async (callback) => {
+        await AsyncStorage.removeItem('token')
+        callback()
     }
 };
 
 const checkToken = dispatch => {
     return async() => {
         const token = await AsyncStorage.getItem('token')
-        token ?  dispatch({ type: 'sign_in' });
-       
+        token ?  dispatch({ type: 'login' }) : null ;
     }
 };
 
 
 export const { Context, Provider } = createDataContext(authReducer,
     {
-        checkToken, login, signup, verify, resetPassword, clearMessage
+        checkToken, login, signup, verify, Logout, clearMessage
     }, { errorMessage: '', token: null, message: '' })
