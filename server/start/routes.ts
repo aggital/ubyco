@@ -44,6 +44,7 @@ Route.group(() => {
     Route.get('/get-picture', 'UserController.getPicture')
     Route.get('/card', 'UserController.card')
     Route.get('/card-type', 'UserController.cardType')
+    Route.get('/coin', 'UserController.coin')
     Route.post('/rate-calculator', 'UserController.rateCalculator')
     Route.post('/withdraw', 'UserController.withdraw')
 }).prefix('/user').middleware('auth')

@@ -7,6 +7,7 @@ import * as Helper from '../common'
 import Card from 'App/Models/Card'
 import UserAmount from 'App/Models/UserAmount'
 import UserAccount from 'App/Models/UserAccount'
+import Coin from 'App/Models/Coin'
 // import UserAccount from 'App/Models/UserAccount'
 // import { Response } from '@adonisjs/http-server/build/standalone';
 
@@ -148,8 +149,17 @@ export default class UsersController {
     public async card({response}){
         try {
             const card = await Card.all()
-            // await user?.load('userAmount')
             return response.send({message: card})
+        } catch (error) {
+            return response.badRequest(error)
+        }
+        
+    }
+
+    public async coin({response}){
+        try {
+            const coin = await Coin.all()
+            return response.send({message: coin})
         } catch (error) {
             return response.badRequest(error)
         }
@@ -171,6 +181,7 @@ export default class UsersController {
             const card : any= await Card.findBy('name', payload.name) 
             await card.load('cardTypes')
             return response.send({message: card?.cardTypes})
+            console.log()
         } catch (error) {
             console.log(error)
             return response.badRequest(error)

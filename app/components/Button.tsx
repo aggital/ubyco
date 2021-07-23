@@ -6,8 +6,9 @@ import * as Element from 'react-native-elements'
 interface Props {
    title: string;
    onPress: undefined;
+   loading: undefined;
 }
-const Button: FC<Props> = ({title, onPress}) => {
+const Button: FC<Props> = ({title, onPress, loading}) => {
     return (
         <View>
            <Element.Button 
@@ -15,6 +16,7 @@ const Button: FC<Props> = ({title, onPress}) => {
             buttonStyle={{height: 50, backgroundColor:'#f63757', borderRadius: 10}}
             containerStyle={{margin: 10}}
             onPress={onPress}
+            loading={loading}
          />
         </View>
     )

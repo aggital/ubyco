@@ -95,34 +95,15 @@ const signup = dispatch => {
 const verify = dispatch => {
     return async (token, callback) => {
         try {
-            const response = await Server.put('/verify', { verification_code: token }, { timeout: 2500 });
+            const response = await Server.put('/verify', { verification_code: token });
+            console.log(response)
             await AsyncStorage.setItem('token', response.data.message.token)
             dispatch({ type: 'login', payload: response.data.message.token })
             callback();
-        } catch (err) {
-            const message = err.response.data
-            const network = err.response.status
-            if (Object.keys(message).length <= 0) {
-                dispatch({ type: 'add_error', payload: 'Invalid Token' })
-            } else if (network == 400 && Object.keys(message).length > 0) {
-                let errors = message.messages.errors
-                const uniques = errors.map(
-                    (obj) => {
-                        return obj.field
-                    }
-                )
-                let obj = {}
-                for (var i = 0; i < uniques.length; i++) {
-                    obj[uniques[i]] = errors[i].message;
-                    dispatch({ type: 'add_error', payload: obj })
-                }
-            } else if (network == 401) {
-                dispatch({ type: 'add_error', payload: err.response.data.message })
-            } else {
+        } catch (err) {            
                 dispatch({ type: 'add_error', payload: 'something went wrong' })
             }
         }
-    }
 };
 
 const Logout = dispatch => {

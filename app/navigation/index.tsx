@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
-import NotFoundScreen from '../screens/NotFoundScreen';
+import ImageBrowser from '../screens/ImageBrowser';
 import { RootStackParamList } from '../types';
 import AuthTabNavigator from './AuthTabNavigator';
 import DrawerTabNavigator from './DrawerTabNavigator'
@@ -35,7 +35,9 @@ function RootNavigator() {
         name="Root" 
         component={DrawerTabNavigator}
       />
-      <Stack.Screen name="NotFound" component={NotFoundScreen}/>
+      <Stack.Screen name="ImageBrowser" 
+      component={ImageBrowser}  
+      />
     </Stack.Navigator>
   );
 }

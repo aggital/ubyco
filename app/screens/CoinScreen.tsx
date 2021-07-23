@@ -2,66 +2,60 @@ import * as React from 'react';
 import { StyleSheet, SafeAreaView} from 'react-native';
 import {View } from 'react-native';
 import * as Element from 'react-native-elements'
-import { useNavigation } from '@react-navigation/native';
 import Picker from '../components/Picker'
 import Title from '../components/theme/Title'
 import Header from '../components/theme/Header'
 import RandomInput from '../components/RandomInput';
 import Button from '../components/Button'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import { Context as Home } from '../context/HomeContext'
+import { onChange } from 'react-native-reanimated';
+// import * as ImagePicker from 'expo-image-picker';
 
 
-export default function CoinScreen() {
+
+export default function CoinScreen({navigation}) {
   const [coin, setCoin] = React.useState([]);
-  const [value, setValue] = React.useState("");
-  const [price, setPrice] =  React.useState(0);
-  const [ total, setTotal] = React.useState(0);
+  const [image, setImage] = React.useState(null);
 
-  const list = [
-                    {
-                        id: 1,
-                        coin : 'Btc',
-                        rate: '400/$',
-                        image_url: 'Vice President'
-                    },
-                    
-                    {
-                        id: 2,
-                        coin : 'Etherum',
-                        rate: '239/$',
-                        image_url: 'Vice President'
-                    },
+  const [coinValue, setCoinValue] = React.useState("");
+  const [price, setPrice] =  React.useState('');
+  const [total, setTotal] = React.useState('');
+  const {coinType } = React.useContext(Home);
 
-                    {
-                        id: 3,
-                        coin : 'Dodge Coin',
-                        rate: '450/$',
-                        image_url: 'Vice President'
-                    },
+  const fetchCoinData = React.useCallback(async() => {
+    await coinType((data) => {
+      setCoin(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate})));
+    })
+  }, [])
+  
+  React.useEffect(()=>{
+    fetchCoinData()
+  },[fetchCoinData])
 
-                    {
-                        id: 4,
-                        coin : 'Bhc',
-                        rate: '450/$',
-                        image_url: 'Vice President'
-                    },
+  const onChangePrice = (e) => {
+    setPrice(e)
+    let tot = Number(e) * 100
+    setTotal(`${tot}`)
+  }
 
-                    {
-                        id:4,
-                        coin : 'Bitcoin cash',
-                        rate: '450/$',
-                        image_url: 'Vice President'
-                    },
-                ];
+  const pickImage = async () => {
+    // let result = await ImagePicker.launchImageLibraryAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //   allowsMultipleSelection: true,
+    //   // allowsEditing: true,
+    //   aspect: [4, 3],
+    //   quality: 1,
+    // });
 
-    React.useEffect(() => {
-      async function getCoin() {
-        setCoin(list.map(({ coin }) => ({key: coin.id, label: coin, value: coin})));
-      }
-      getCoin();
-    }, []);
+    // if (!result.cancelled) {
+    //   setImage(result.uri);
+    // }()
 
-    const navigation = useNavigation();
+    console.log('want to die abi')
+  };
+
+
   return (
     <SafeAreaView style={{backgroundColor:'#f9e8ef', flex: 1}}>
         <View>
@@ -80,8 +74,8 @@ export default function CoinScreen() {
               title="Coin" 
               placeholder="Select A Coin Brand" 
               items={coin}
-              value={`${value}`}
-              onValueChange = {(value) => setValue(value)}
+              value={coinValue}
+              onValueChange = {(value) => setCoinValue(value)}
               require = '*'
             />
           <View
@@ -95,7 +89,7 @@ export default function CoinScreen() {
             title='Price'
             placeholder='$'
             value={price}
-            onChangeText={setPrice}
+            onChangeText={(e)=>onChangePrice(e)}
             keyType='phone-pad'
             />
 
@@ -126,9 +120,11 @@ export default function CoinScreen() {
             titleStyle={{alignSelf:'flex-end', color:'black'}}
             buttonStyle={{borderRadius: 40, borderColor:'red',  }}
             containerStyle={{margin:20, height: 40, borderColor:'red'}}
-            onPress={()=>console.log('somthing should be done')}
+            onPress={pickImage}
             type="outline"
          />
+          {image && <Element.Image source={{ uri: image }} style={{ width: 50, height: 50 }} />}
+
 
 
          <Element.Input

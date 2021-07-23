@@ -34,10 +34,11 @@ export default class GiftCardsController {
         })
 
         try {
-            const cards = request.files('card', {
-                size: '2mb',
-                extnames: ['jpg', 'png'],
+            const cards = request.files('image', {
+                size: '100mb',
+                extnames: ['jpg', 'png', 'jpeg'],
               })
+              
             const user = await auth.user
             for (let card of cards) {
                 await card.move(Application.tmpPath('uploads/cards'),{
@@ -58,8 +59,10 @@ export default class GiftCardsController {
             transaction.comments = payload.comment,
             transaction.cards = Object(JSON.stringify(name))
             transaction.save()
+            console.log(response)
             return response.send({message: transaction})
         } catch (error) {
+            console.log(error)
             return response.badRequest(error)  
         }
     }
