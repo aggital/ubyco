@@ -67,10 +67,10 @@ export default class User extends BaseModel {
     }
   }
 
-  @hasOne(() => UserAccount , {
+  @hasMany(() => UserAccount , {
     foreignKey: 'user_id'
   })
-  public userAccounts: HasOne<typeof UserAccount>
+  public userAccounts: HasMany<typeof UserAccount>
 
 
   @hasOne(()=>UserAmount, {

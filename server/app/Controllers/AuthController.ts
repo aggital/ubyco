@@ -2,7 +2,6 @@
 import { schema, rules, validator } from "@ioc:Adonis/Core/Validator";
 import * as Helper from "../common";
 import User from "../Models/User";
-import NotfoundException from "App/Exceptions/NotfoundException";
 
 export default class AuthController {
   public async register({ request, response }) {
@@ -38,7 +37,7 @@ export default class AuthController {
         ],
       });
       // send token to phone number
-      // await Helper.sendToken(payload.phone, `your Ubyco token is ${verification_code}`)
+      await Helper.sendToken(payload.phone, `your Ubyco token is ${verification_code}`)
 
       //Create new user
       const user = new User();
@@ -50,6 +49,7 @@ export default class AuthController {
       await user.save();
       return response.status(200);
     } catch (error) {
+      console.log(error)
       return response.badRequest(error.messages);
     }
   }

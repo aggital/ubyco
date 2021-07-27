@@ -6,6 +6,7 @@ import * as Element from 'react-native-elements'
 
 export default function ImageBrowserScreen({navigation, route}){
   const {screen} = route.params
+  const {max} = route.params
   const [done, setDone] = React.useState(null)
   const [title, setTitle]= React.useState('Select a file')
   const getHeaderLoader = () => (
@@ -98,7 +99,7 @@ export default function ImageBrowserScreen({navigation, route}){
                 
             </View>
         <ImageBrowser
-          max={4}
+          max={max}
           onChange={updateHandler}
           callback={imagesCallback}
           renderSelectedComponent={renderSelectedComponent}

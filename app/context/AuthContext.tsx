@@ -2,7 +2,8 @@ import createDataContext from './createDataContext';
 import Server from '../api/Server';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const authReducer = (state, action) => {
+
+const authReducer =(state:object, action:any) => {
     switch (action.type) {
         case 'login':
             return { ...state, token: action.payload };
@@ -25,8 +26,7 @@ const clearMessage = dispatch => () => {
 }
 
 
-const login = dispatch => {
-    return async (email, password, callback) => {
+const login = dispatch => async(email:string, password:string, callback:() => void) => {
         try {
             const response = await Server.post('/login',
                 { email, password },
@@ -59,11 +59,9 @@ const login = dispatch => {
             }
 
         }
-    }
 };
 
-const signup = dispatch => {
-    return async (fullname, phone, email, password, callback) => {
+const signup = dispatch => async (fullname, phone, email, password, callback) => {
         try {
             const response = await Server.post('/register', { fullname, phone, email, password });
             callback();
@@ -89,11 +87,9 @@ const signup = dispatch => {
                  dispatch({ type: 'add_error', payload: 'something went wrong' })
             }
         }
-    }
-};
+    };
 
-const verify = dispatch => {
-    return async (token, callback) => {
+const verify = dispatch => async (token, callback) => {
         try {
             const response = await Server.put('/verify', { verification_code: token });
             console.log(response)
@@ -103,7 +99,6 @@ const verify = dispatch => {
         } catch (err) {            
                 dispatch({ type: 'add_error', payload: 'something went wrong' })
             }
-        }
 };
 
 const Logout = dispatch => {

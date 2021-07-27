@@ -5,8 +5,8 @@ import * as Element from 'react-native-elements'
 
 interface Props {
    title: string;
-   onPress: undefined;
-   loading: undefined;
+   onPress: any;
+   loading: boolean;
 }
 const Button: FC<Props> = ({title, onPress, loading}) => {
     return (

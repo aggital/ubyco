@@ -4,6 +4,7 @@ import Application from '@ioc:Adonis/Core/Application'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import CoinTransaction from 'App/Models/CoinTransaction'
 import Coin from 'App/Models/Coin'
+
 export default class BitcoinsController {
     public async intiateTrade({request, response, auth}){
         const data = schema.create({
@@ -20,7 +21,7 @@ export default class BitcoinsController {
             rules.required()
         ]),
            receipt: schema.file({
-               size: '2mb',
+               size: '20mb',
                extnames: ['jpg','png']
            })
         });

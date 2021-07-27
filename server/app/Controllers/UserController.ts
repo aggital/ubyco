@@ -179,9 +179,8 @@ export default class UsersController {
                     }
             })
             const card : any= await Card.findBy('name', payload.name) 
-            await card.load('cardTypes')
+            await card?.load('cardTypes')
             return response.send({message: card?.cardTypes})
-            console.log()
         } catch (error) {
             console.log(error)
             return response.badRequest(error)
@@ -234,7 +233,10 @@ export default class UsersController {
             ]),
             account_name: schema.string({}, [
                 rules.required(),
-           ])
+           ]),
+          bank: schema.string({}, [
+            rules.required(),
+       ])
         });
 
         try {
@@ -245,21 +247,20 @@ export default class UsersController {
                     }
             })
             const user = await auth.user
-            await user.load('userAccounts')
+            await user?.load('userAccounts')
             
-            if (user.userAccounts !== null){
-                console.log(user?.userAccounts)
-                return response.send({message: "You already have an account"})
-                
+            if (user.userAccounts.length === 2){
+                return response.send({message: "Account limit exceeded"})
             }
             await user.related('userAccounts').create({
                 bank_code: payload.bank_code,
                 account_number: payload.account_number,
-                account_name: payload.account_name
+                account_name: payload.account_name,
+                bank: payload.bank
             })
-            return response.send({message:"Acount Successfully added"})
+            return response.send({message:"Account Successfully added"})
         } catch (error) {
-            console.log(error)
+
             response.badRequest(error)
         }
         
@@ -298,5 +299,4 @@ export default class UsersController {
 
     }
 
-    
 }

@@ -4,56 +4,59 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Picker from './Picker'
 import RandomInput from './RandomInput';
 import Button from './Button'
+import { Context as Home } from '../context/HomeContext'
 
 const CryptoRate = () => {
     const [coin, setCoin] = React.useState([]);
-    const [value, setValue] = React.useState("");
-    const [total, setTotal] = React.useState("");
-    const [amount, setAmount] = React.useState("");
+    const [value, setValue] = React.useState(null);
+    const [total, setTotal] = React.useState(null);
+    const [amount, setAmount] = React.useState(null);
+    const [rate, setRate] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
 
-    const list = [
-        {
-            id: 1,
-            coin : 'Btc',
-            rate: '400/$',
-            image_url: 'Vice President'
-        },
-        
-        {
-            id: 2,
-            coin : 'Etherum',
-            rate: '239/$',
-            image_url: 'Vice President'
-        },
+    const {coinType} = React.useContext(Home);
 
-        {
-            id: 3,
-            coin : 'Dodge Coin',
-            rate: '450/$',
-            image_url: 'Vice President'
-        },
+   
 
-        {
-            id: 4,
-            coin : 'Bhc',
-            rate: '450/$',
-            image_url: 'Vice President'
-        },
+    const fetchCoinData = React.useCallback(async() => {
+        await coinType((data:[]) => {
+          setCoin(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate})));
+        })
+      }, [])
+    
+     React.useEffect(()=>{
+        fetchCoinData()
+      },[fetchCoinData])
 
-        {
-            id:4,
-            coin : 'Bitcoin cash',
-            rate: '450/$',
-            image_url: 'Vice President'
-        },
-    ];
+    const result =() =>{
+        if(value != ""){
+            setLoading(true)
+            let tot = Number(rate) * Number(amount)
+            setTotal(`${tot}`)
+            setLoading(false)
+        }else{
+            alert('fill the require column')
+        }
+      
+    } 
 
-React.useEffect(() => {
-async function getCoin() {
-setCoin(list.map(({ coin }) => ({ label: coin, value: coin})));
-}
-getCoin();
-}, []);
+      const onBrandSelect = async (e:string) => {
+        setValue(e)
+        setRate(null)
+        setAmount(null)
+        setTotal(null)
+    }
+
+      const onChangePrice = (e) => {
+        if(value != null){
+            let obj = coin.find(o => o.label === value);
+            setRate(obj.rate)
+            setAmount(e)
+          }else{
+            alert('select a Coin to proceed')
+          }
+      }
+
     return (
         <KeyboardAwareScrollView>
             <Picker
@@ -61,7 +64,7 @@ getCoin();
                  placeholder="Select A Card Brand" 
                  items={coin}
                  value={`${value}`}
-                 onValueChange = {(value) => setValue(value)}
+                 onValueChange = {(e) => onBrandSelect(e)}
                  require = '*'
             />
              <View
@@ -74,8 +77,8 @@ getCoin();
             <RandomInput
                 title='Amount'
                 placeholder='0'
-                value={total}
-                onChangeText={setTotal}
+                value={amount}
+                onChangeText={(e) => onChangePrice(e)}
                 keyType='phone-pad'
             />
 
@@ -88,7 +91,7 @@ getCoin();
             keyType='numbers-and-punctuation'
             />
 
-        <Button title='Calculate' onPress={()=>console.log("working")} />
+        <Button title='Calculate' onPress={result} loading={loading} />
         </KeyboardAwareScrollView>
     )
 }

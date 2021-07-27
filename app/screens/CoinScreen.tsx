@@ -7,21 +7,25 @@ import Title from '../components/theme/Title'
 import Header from '../components/theme/Header'
 import RandomInput from '../components/RandomInput';
 import Button from '../components/Button'
+import { useFocusEffect } from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import { Context as Home } from '../context/HomeContext'
-import { onChange } from 'react-native-reanimated';
-// import * as ImagePicker from 'expo-image-picker';
 
 
-
-export default function CoinScreen({navigation}) {
+export default function CoinScreen({navigation,route}) {
   const [coin, setCoin] = React.useState([]);
   const [image, setImage] = React.useState(null);
-
   const [coinValue, setCoinValue] = React.useState("");
-  const [price, setPrice] =  React.useState('');
-  const [total, setTotal] = React.useState('');
-  const {coinType } = React.useContext(Home);
+  const [amount, setAmount] = React.useState('');
+  const [check, setCheck] = React.useState(true)
+  const [comment, setComment] = React.useState('');
+  const [rate, setRate] = React.useState(null);
+  const [id, setId] = React.useState(null);
+  const [total, setTotal] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+
+  const {coinType, initiateCoinTrade} = React.useContext(Home);
 
   const fetchCoinData = React.useCallback(async() => {
     await coinType((data) => {
@@ -33,27 +37,62 @@ export default function CoinScreen({navigation}) {
     fetchCoinData()
   },[fetchCoinData])
 
-  const onChangePrice = (e) => {
-    setPrice(e)
-    let tot = Number(e) * 100
-    setTotal(`${tot}`)
+  React.useEffect(() => {
+    if(coinValue != ""){
+      const tot = Number(amount) * Number(rate)
+      setTotal(`${tot}`)
+    }
+  }, [amount]);
+
+
+  const onBrandSelect = async (e) => {
+    setRate(null)
+    setId(null)
+    setAmount('')
+    setCheck(false)
+    setCoinValue(e)
   }
 
-  const pickImage = async () => {
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //   allowsMultipleSelection: true,
-    //   // allowsEditing: true,
-    //   aspect: [4, 3],
-    //   quality: 1,
-    // });
+  const onChangePrice = (e) => {
+    if(coinValue != null){
+      let obj = coin.find(o => o.label === coinValue);
+      setId(obj.key)
+      setRate(obj.rate)
+      setAmount(e)
+    }else{
+      alert('Select a coin')
+    }
+  }
 
-    // if (!result.cancelled) {
-    //   setImage(result.uri);
-    // }()
+  const pickImage = () => {
+    navigation.navigate('ImageBrowser', {screen: 'CoinScreen', max: 1})
+  }
 
-    console.log('want to die abi')
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      const photo = route.params?.photos
+      const set = setImage(photo)
+      return set
+    }, [route.params])
+  );
+
+  //submit card for trade
+const tradeCoin = async () => {
+  setLoading(true)
+  await initiateCoinTrade(id, amount, comment, image, rate, () => {
+    console.log('submit successfully')
+  })
+  setLoading(false)
+};
+
+  const renderImage = (item, i) => {
+    <Element.Image
+      style={{ height: 100, width: 100 }}
+      source={{ uri: item.uri }}
+      key={i}
+    />
+  }
+
 
 
   return (
@@ -75,7 +114,7 @@ export default function CoinScreen({navigation}) {
               placeholder="Select A Coin Brand" 
               items={coin}
               value={coinValue}
-              onValueChange = {(value) => setCoinValue(value)}
+              onValueChange = {(value) => onBrandSelect(value)}
               require = '*'
             />
           <View
@@ -88,9 +127,10 @@ export default function CoinScreen({navigation}) {
           <RandomInput 
             title='Price'
             placeholder='$'
-            value={price}
+            value={amount}
             onChangeText={(e)=>onChangePrice(e)}
             keyType='phone-pad'
+            disable={check}
             />
 
           <View
@@ -119,14 +159,15 @@ export default function CoinScreen({navigation}) {
             title= "Upload Receipt"
             titleStyle={{alignSelf:'flex-end', color:'black'}}
             buttonStyle={{borderRadius: 40, borderColor:'red',  }}
-            containerStyle={{margin:20, height: 40, borderColor:'red'}}
+            containerStyle={{margin:10, height: 40, borderColor:'red'}}
             onPress={pickImage}
             type="outline"
          />
-          {image && <Element.Image source={{ uri: image }} style={{ width: 50, height: 50 }} />}
-
-
-
+         <View style={{flexDirection:'row'}}>
+          {image &&
+            image.map((item, i) =><Element.Image source={{ uri: item.uri }} key={i} style={{width: 50, height: 50, margin: 4 }} />)
+          }
+          </View>
          <Element.Input
             placeholder='Add a Comment'
             containerStyle={{
@@ -140,11 +181,13 @@ export default function CoinScreen({navigation}) {
               padding: 7
             }}
             multiline={true}
+            value={comment}
+            onChangeText={setComment}
 
          />
-         <View style={{marginTop: 10}}>
-            <Button title = "Sale Coin" onPress={()=>console.log('proceess Coil')} />
-         </View>
+         <View style={{ marginTop: 10 }}>
+            <Button title="Trade Coin" onPress={tradeCoin} loading={loading} />
+          </View>
          <View>
              <Element.Text style={{fontSize: 12, color:'red'}}>
                     Note: Users are to upload screenshot of sending apps alone

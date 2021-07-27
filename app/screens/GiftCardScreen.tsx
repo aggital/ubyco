@@ -19,7 +19,6 @@ export default function GiftCardScreen({ route, navigation }) {
   //cardbrand and card type state to hold context api data state
   const [brand, setBrand] = React.useState([]);
   const [type, setType] = React.useState([]);
-
   //card and type selected value
   const [brandValue, setBrandValue] = React.useState("");
   const [typeValue, setTypeValue] = React.useState("");
@@ -30,7 +29,6 @@ export default function GiftCardScreen({ route, navigation }) {
   const [rate, setRate] = React.useState(null)
   const [id, setId] = React.useState(null)
   const [image, setImage] = React.useState(null);
-  const [select, setSelelct] = React.useState(false)
 
   //total state
   const [total, setTotal] = React.useState(null);
@@ -47,22 +45,29 @@ export default function GiftCardScreen({ route, navigation }) {
     }
   }, [])
 
+   //fecth cards on render
+   React.useEffect(() => {
+    getCards()
+  }, [getCards]);
 
+//when brand is selected
   const onBrandSelect = async (event) => {
     setBrandValue(event);
     setType([])
-    setRate('')
-    setId('')
+    setRate(null)
+    setId(null)
     setAmount('')
     await cardType(event, (data) => {
       setType(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate })));
     });
   }
 
+  //when card type is selected
   const onTypeSelect = (value) => {
     setTypeValue(value);
   }
 
+  //on price change
   const priceChange = (value) => {
     let obj = type.find(o => o.label === typeValue);
     setId(obj.key)
@@ -70,20 +75,23 @@ export default function GiftCardScreen({ route, navigation }) {
     setAmount(value)
   }
 
-
-
-
-
-
-
-  const pickImage = () => {
-    navigation.navigate('ImageBrowser', {screen: 'GiftCardScreen'})
+//go to imagebrowser to fetch card
+const pickImage = () => {
+    navigation.navigate('ImageBrowser', {screen: 'GiftCardScreen', max: 6})
   }
 
+//to render image when upload successfull
+const renderImage = (item, i) => {
+  <Image
+    style={{ height: 100, width: 100 }}
+    source={{ uri: item.uri }}
+    key={i}
+  />
+}
 
-
-  const tradeCard = async () => {
-    state.errorMessage = ''
+//submit card for trade
+const tradeCard = async () => {
+    //state.errorMessage = ''
     setLoading(true)
     await initiateCardTrade(id, amount, comment, image, rate, () => {
       console.log('submit successfully')
@@ -91,32 +99,21 @@ export default function GiftCardScreen({ route, navigation }) {
     setLoading(false)
   };
 
-
-  const renderImage = (item, i) => {
-    <Image
-      style={{ height: 100, width: 100 }}
-      source={{ uri: item.uri }}
-      key={i}
-    />
-  }
-
-
-  React.useEffect(() => {
+//helps to update when price changes
+React.useEffect(() => {
     const tot = Number(amount) * Number(rate)
    setTotal(`${tot}`)
   }, [amount]);
 
-  useFocusEffect(
+  //render image uploaded image
+useFocusEffect(
     React.useCallback(() => {
       const photo = route.params?.photos
       const set = setImage(photo)
       return set
     }, [route.params])
   );
-  //fecth cards on render
-  React.useEffect(() => {
-    getCards()
-  }, [getCards]);
+ 
 
   
   return (

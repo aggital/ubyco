@@ -31,14 +31,13 @@ export default class GiftCardsController {
                 messages: {
                 required: 'The {{ field }} is required',
                 }
-        })
+        }))
 
         try {
-            const cards = request.files('image', {
-                size: '100mb',
-                extnames: ['jpg', 'png', 'jpeg'],
+            const cards = request.files('card', {
+                size: '2mb',
+                extnames: ['jpg', 'png'],
               })
-              
             const user = await auth.user
             for (let card of cards) {
                 await card.move(Application.tmpPath('uploads/cards'),{
@@ -59,13 +58,12 @@ export default class GiftCardsController {
             transaction.comments = payload.comment,
             transaction.cards = Object(JSON.stringify(name))
             transaction.save()
-            console.log(response)
             return response.send({message: transaction})
-        } catch (error) {
-            console.log(error)
-            return response.badRequest(error)  
+        } catch(error) {
+            console.log(error) 
         }
     }
+          
 
     public async getAllTrade({response, auth}){
         try {
@@ -91,8 +89,8 @@ export default class GiftCardsController {
           })
            return response.send({message: transaction})
         } catch (error) {
-            console.log(error)
-            return response.badRequest(error)
+            return(error)
+            // return response.badRequest(error)
         }
     }
 

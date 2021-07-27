@@ -2,8 +2,8 @@ import React from 'react'
 import { StyleSheet,View,Dimensions,SafeAreaView } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
 import {Icon,Text} from 'react-native-elements'
-import { useNavigation } from '@react-navigation/native';
-import {HeaderParamList} from '../../types'
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+
 
 
 const Header = () => {
@@ -28,7 +28,7 @@ const Header = () => {
                     type='ionicons'
                     color='white'
                     size={32}
-                    onPress={() => navigation.toggleDrawer()}
+                    onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
                     containerStyle={{margin: 10}}
                 />
             </View>

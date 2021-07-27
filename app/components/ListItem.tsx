@@ -1,8 +1,15 @@
-import React from 'react'
+import React,{FC} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import * as Elements from 'react-native-elements'
 
-const ListItem = ({name, rate, image}) => {
+
+
+interface Props {
+    name: string;
+    rate: string;
+    image:string
+ }
+const ListItem :FC<Props>= ({name, rate, image}) => {
     return (
         <View style={styles.container}>
            <Elements.Avatar
