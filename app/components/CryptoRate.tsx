@@ -19,9 +19,7 @@ const CryptoRate = () => {
    
 
     const fetchCoinData = React.useCallback(async() => {
-        await coinType((data:[]) => {
-          setCoin(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate})));
-        })
+        await coinType((data:[]) => setCoin(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate }))))
       }, [])
     
      React.useEffect(()=>{

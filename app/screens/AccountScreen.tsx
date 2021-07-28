@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Context as Home } from '../context/HomeContext'
 
 
-export default function AccountScreen({ route, navigation }) {
+export default function AccountScreen() {
 
     //cardbrand and card type state to hold context api data state
     const [bank, setBank] = React.useState([]);
@@ -32,10 +32,10 @@ export default function AccountScreen({ route, navigation }) {
 
     //fetch cards function
     const getBanks = React.useCallback(async () => {
-        await fetchBank((data) => {
-            setBank(data.map((element) => ({ key: element.id, label: element.name, value: element.name, code: element.code })))
+        await fetchBank((data: { map: (arg0: (element: any) => { key: any; label: any; value: any; code: any; }) => React.SetStateAction<never[]>; }) => {
+            setBank(data.map((element: { id: any; name: any; code: any; }) => ({ key: element.id, label: element.name, value: element.name, code: element.code })))
         })
-        await getAccount((data) =>{
+        await getAccount((data: React.SetStateAction<null>) =>{
             setAccount(data)
         })
 
@@ -47,13 +47,13 @@ export default function AccountScreen({ route, navigation }) {
     }, [getBanks]);
 
     //when brand is selected
-    const onBrandSelect = async (event) => {
+    const onBrandSelect = async (event: React.SetStateAction<string>) => {
         setAccountName(null)
         setAccountNumber(null)
         setBankValue(event);
     }
 
-    const setNumber = (e) => {
+    const setNumber = (e: React.SetStateAction<null>) => {
         setAccountNumber(e)
         if (bankValue != null) {
             let obj = bank.find(o => o.value === bankValue)
@@ -67,7 +67,7 @@ export default function AccountScreen({ route, navigation }) {
 
 
     const fetchName = async () => {
-        await bankAccountName(code, accountNumber, (data) => {
+        await bankAccountName(code, accountNumber, (data: React.SetStateAction<null>) => {
             setAccountName(data)
         })
     }
@@ -75,7 +75,7 @@ export default function AccountScreen({ route, navigation }) {
     const submit = async () => {
         setLoading(true)
         console.log(code, accountNumber, accountName, bankName) 
-        await addAccount(code, accountNumber, accountName, bankName, (data) => {
+        await addAccount(code, accountNumber, accountName, bankName, (data: any) => {
             setAccountName(null)
             setAccountNumber(null)
             setCode(null)
@@ -126,7 +126,7 @@ export default function AccountScreen({ route, navigation }) {
                         title='Account Number'
                         placeholder='Account Number'
                         value={accountNumber}
-                        onChangeText={(e) => setNumber(e)}
+                        onChangeText={(e: any) => setNumber(e)}
                         keyType='phone-pad'
                     />
                     <View
@@ -161,7 +161,7 @@ export default function AccountScreen({ route, navigation }) {
 
                     <View style={{flexDirection:'row', justifyContent:'space-between', padding: 20}}>
                      {
-                     account ? account?.map((l,i) =>(
+                     account ? account?.map((l: { bank: string; account_number: string; account_name: string; },i: React.Key | null | undefined) =>(
                             <AccountCard
                             key={i}
                             bank={l.bank}

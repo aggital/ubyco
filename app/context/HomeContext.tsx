@@ -2,11 +2,11 @@ import createDataContext from './createDataContext';
 import Server from '../api/Server';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import FormData from 'form-data';
+// import FormData from 'form-data';
 import mime from "mime";
 
 
-const homeReducer = (state, action) => {
+const homeReducer = (state: any, action: { type: any; payload: any; }) => {
     switch (action.type) {
         case 'get_user':
             return { ...state, user: action.payload };
@@ -21,12 +21,12 @@ const homeReducer = (state, action) => {
     }
 }
 
-const clearMessage = dispatch => () => {
+const clearMessage = (dispatch: (arg0: { type: string; }) => void) => () => {
     dispatch({ type: 'clear_error_message' })
 }
 
 
-const getUser = dispatch => {
+const getUser = (dispatch: (arg0: { type: string; payload: any; }) => void) => {
     return async () => {
         try {
             const token = await AsyncStorage.getItem('token')
@@ -48,7 +48,7 @@ const getUser = dispatch => {
 };
 
 
-const getCard = dispatch => {
+const getCard = (dispatch: (arg0: { type: string; payload: any; }) => void) => {
     return async () => {
         try {
             const token = await AsyncStorage.getItem('token')
@@ -67,8 +67,8 @@ const getCard = dispatch => {
     }
 };
 
-const cardType = dispatch => {
-    return async (value, callback) => {
+const cardType = (dispatch: (arg0: { type: string; payload: string; }) => void) => {
+    return async (value: any, callback: (arg0: any) => void) => {
         try {
             const token = await AsyncStorage.getItem('token')
             const response = await Server.get(`/user/card-type`, {
@@ -90,8 +90,8 @@ const cardType = dispatch => {
 
 }
 
-const coinType = dispatch => {
-    return async (callback) => {
+const coinType = (dispatch: (arg0: { type: string; payload: string; }) => void) => {
+    return async (callback: (arg0: any) => void) => {
         try {
             const token = await AsyncStorage.getItem('token')
             const response = await Server.get(`/user/coin`, {
@@ -109,9 +109,8 @@ const coinType = dispatch => {
 
 }
 
-const initiateCardTrade = dispatch => {
-    // console.log('let work')
-    return async (id, amount, comment, image, rate, callback) => {
+const initiateCardTrade = (dispatch: any) => {
+    return async (id: any, amount: any, comment: any, image: any, rate: any, callback: any) => {
         try {
             const token = await AsyncStorage.getItem('token')
 
@@ -125,18 +124,17 @@ const initiateCardTrade = dispatch => {
             formData.append('data', JSON.stringify(data));
 
             const option = { content: formData }
-            console.log(option)
 
-            // const response = await Server.post('/giftcard/initiate-trade',
-            //     { data: fdata },
-            //     {
-            //         headers: {
-            //             'Authorization': `Bearer ${token}`,
-            //             'content-type': `multipart/form-data; boundary=--------something awesome`,
-            //         },
-            //     }
-            // );
-            // console.log(response)
+            const response = await Server.post('/giftcard/initiate-trade',
+                { data: formData },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        // 'content-type': `multipart/form-data; boundary=--------something awesome`,
+                    },
+                }
+            );
+            console.log(response)
 
         } catch (error) {
             console.log(error.response)
@@ -145,8 +143,8 @@ const initiateCardTrade = dispatch => {
     }
 }
 
-const initiateCoinTrade = dispatch => {
-    return async (id, amount, comment, image, rate, callback) => {
+const initiateCoinTrade = (dispatch: any) => {
+    return async (id: string | Blob, amount: string | Blob, comment: string | Blob, image: string | any[], rate: string | Blob, callback: any) => {
         try {
             const token = await AsyncStorage.getItem('token')
             let formdata = new FormData()
@@ -165,19 +163,19 @@ const initiateCoinTrade = dispatch => {
             for (let [key, value] of formdata.entries()) {
                 console.log(`${key}: ${value}`);
             }
-            // console.log(formdata)
-            // const response = await Server.post('/coin/initiate-trade',
-            //     { data: formdata },
-            //     // {mode: 'cors'},
-            //     {
-            //         headers: {
-            //             'Authorization': `Bearer ${token}`,
-            //             'user-agent': 'Thunder Client (https://www.thunderclient.io)',
-            //             'content-type': `multipart/form-data; boundary=${formdata._boundary}`,
-            //         },
-            //     }
-            // );
-            // console.log(response)
+        
+            const response = await Server.post('/coin/initiate-trade',
+                { data: formdata },
+                // {mode: 'cors'},
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'user-agent': 'Thunder Client (https://www.thunderclient.io)',
+                        'content-type': `multipart/form-data; boundary=${formdata._boundary}`,
+                    },
+                }
+            );
+            console.log(response)
 
         } catch (error) {
             console.log(error.response.data)
@@ -186,8 +184,8 @@ const initiateCoinTrade = dispatch => {
     }
 }
 
-const fetchBank = dispatch => {
-    return async (callback) => {
+const fetchBank = (dispatch: (arg0: { type: string; payload: string; }) => void) => {
+    return async (callback: (arg0: any) => void) => {
         try {
             const token = await AsyncStorage.getItem('token')
             const response = await Server.get(`/list-banks`, {
@@ -204,8 +202,8 @@ const fetchBank = dispatch => {
     }
 }
 
-const getAccount = dispatch => {
-    return async (callback) => {
+const getAccount = (dispatch: (arg0: { type: string; payload: string; }) => void) => {
+    return async (callback: (arg0: any) => void) => {
         try {
             const token = await AsyncStorage.getItem('token')
             const response = await Server.get(`/user/get-account`, {
@@ -222,8 +220,8 @@ const getAccount = dispatch => {
 }
 
 
-const bankAccountName = dispatch => {
-    return async (code, accountNumber, callback) => {
+const bankAccountName = (dispatch: any) => {
+    return async (code: any, accountNumber: any, callback: (arg0: any) => void) => {
         try {
             const token = await AsyncStorage.getItem('token')
             const response = await Server.get(`/user/get-account-name`, {
@@ -251,8 +249,8 @@ const bankAccountName = dispatch => {
 
 }
 
-const addAccount = dispatch => {
-    return async (code, accountName, accountNumber, bankName, callback) => {
+const addAccount = (dispatch: any) => {
+    return async (code: any, accountName: any, accountNumber: any, bankName: any, callback: (arg0: string) => void) => {
         try {
             console.log(code, accountNumber, accountName, bankName) 
             const token = await AsyncStorage.getItem('token')

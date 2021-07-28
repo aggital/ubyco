@@ -41,7 +41,7 @@ export default function GiftCardScreen({ route, navigation }) {
   //fetch cards function
   const getCards = React.useCallback(() => {
     if (cards) {
-      setBrand(cards.map((element) => ({ key: element.id, label: element.name, value: element.name })));
+      setBrand(cards.map((element: { id: any; name: any; }) => ({ key: element.id, label: element.name, value: element.name })));
     }
   }, [])
 
@@ -51,24 +51,24 @@ export default function GiftCardScreen({ route, navigation }) {
   }, [getCards]);
 
 //when brand is selected
-  const onBrandSelect = async (event) => {
+  const onBrandSelect = async (event: React.SetStateAction<string>) => {
     setBrandValue(event);
     setType([])
     setRate(null)
     setId(null)
     setAmount('')
-    await cardType(event, (data) => {
+    await cardType(event, (data: { map: (arg0: (element: any) => { key: any; label: any; value: any; rate: any; }) => React.SetStateAction<never[]>; }) => {
       setType(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate })));
     });
   }
 
   //when card type is selected
-  const onTypeSelect = (value) => {
+  const onTypeSelect = (value: React.SetStateAction<string>) => {
     setTypeValue(value);
   }
 
   //on price change
-  const priceChange = (value) => {
+  const priceChange = (value: React.SetStateAction<string>) => {
     let obj = type.find(o => o.label === typeValue);
     setId(obj.key)
     setRate(obj.rate)
@@ -81,7 +81,7 @@ const pickImage = () => {
   }
 
 //to render image when upload successfull
-const renderImage = (item, i) => {
+const renderImage = (item: { uri: any; }, i: React.Key | null | undefined) => {
   <Image
     style={{ height: 100, width: 100 }}
     source={{ uri: item.uri }}
@@ -165,7 +165,7 @@ useFocusEffect(
             title='Amount'
             placeholder='$'
             value={amount}
-            onChangeText={(value) => priceChange(value)}
+            onChangeText={(value: React.SetStateAction<string>) => priceChange(value)}
             keyType='phone-pad'
           // ref={amountRef}
           />

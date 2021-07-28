@@ -13,7 +13,7 @@ export default function ImageBrowserScreen({navigation, route}){
     <ActivityIndicator size='small' color={'#0580FF'}/>
   );
 
-  const imagesCallback = (callback) => {
+  const imagesCallback = (callback: Promise<any>) => {
     callback.then(async (photos) => {
       const cPhotos = [];
       for(let photo of photos) {
@@ -29,7 +29,7 @@ export default function ImageBrowserScreen({navigation, route}){
     .catch((e) => console.log(e));
   };
 
-  const processImageAsync = async(uri) => {
+  const processImageAsync = async(uri: string) => {
     const file = await ImageManipulator.manipulateAsync(
       uri,
       [{resize: { width: 1000 }}],
@@ -38,7 +38,7 @@ export default function ImageBrowserScreen({navigation, route}){
     return file;
   };
 
-  const RenderDoneButton = (count, onSubmit) => {
+  const RenderDoneButton = (count:any, onSubmit:any) => {
     if (!count) return null;
     return ( 
             <Element.Button
@@ -62,13 +62,13 @@ export default function ImageBrowserScreen({navigation, route}){
    
   }
 
-  const updateHandler = (count, onSubmit) => {
+  const updateHandler = (count: any, onSubmit: any) => {
     setTitle(`Selected ${count} files`)
     setDone(RenderDoneButton(count, onSubmit))
    
   };
 
-  const renderSelectedComponent = (number) => (
+  const renderSelectedComponent = (number:string) => (
     <View style={styles.countBadge}>
       <Text style={styles.countBadgeText}>{number}</Text>
     </View>

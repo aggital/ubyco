@@ -49,7 +49,6 @@ export default class AuthController {
       await user.save();
       return response.status(200);
     } catch (error) {
-      console.log(error)
       return response.badRequest(error.messages);
     }
   }
@@ -98,7 +97,6 @@ export default class AuthController {
         });
         return response.status(200).send({ message: token, user });
     } catch (error) {
-      console.log(error)
        return response.badRequest(error);
     }
   }

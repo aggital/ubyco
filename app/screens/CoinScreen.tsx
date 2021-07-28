@@ -28,7 +28,7 @@ export default function CoinScreen({navigation,route}) {
   const {coinType, initiateCoinTrade} = React.useContext(Home);
 
   const fetchCoinData = React.useCallback(async() => {
-    await coinType((data) => {
+    await coinType((data: { map: (arg0: (element: any) => { key: any; label: any; value: any; rate: any; }) => React.SetStateAction<never[]>; }) => {
       setCoin(data.map((element) => ({ key: element.id, label: element.name, value: element.name, rate: element.rate})));
     })
   }, [])

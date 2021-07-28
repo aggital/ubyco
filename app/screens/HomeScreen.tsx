@@ -47,7 +47,7 @@ const Loading = () => {
   );
 };
 
-const  HomeScreen = ({navigation}) =>{
+const  HomeScreen = () =>{
   const [user, setUser] = React.useState({});
   const [card, setCard] = React.useState([])
   const {state, getUser, getCard} = React.useContext(Home);
@@ -145,7 +145,7 @@ const  HomeScreen = ({navigation}) =>{
           </Element.Text>
           <View>
             {
-              state.card.length > 0 ? state.card.map((l, i) => (
+              state.card.length > 0 ? state.card.map((l: { name: string; rate: string; image: string; }, i: React.Key | null | undefined) => (
                 <Element.ListItem 
                   key={i} bottomDivider 
                   style={{margin: 5, 
