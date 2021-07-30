@@ -19,11 +19,7 @@ export default class BitcoinsController {
            ]),
            rate:schema.string({},[
             rules.required()
-        ]),
-           receipt: schema.file({
-               size: '20mb',
-               extnames: ['jpg','png']
-           })
+        ])
         });
         
         const payload = await request.validate({
@@ -52,8 +48,8 @@ export default class BitcoinsController {
         })
           return response.send({message: transaction})
         } catch (error) {
-            console.log(error)
-            return response.badRequest(error)  
+    
+          return response.badRequest(error)  
         }
     }
 

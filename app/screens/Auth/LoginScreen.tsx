@@ -113,7 +113,7 @@ const LoginScreen = ({ navigation }) => {
                         secureTextEntry={showPassword}
                         keyboardType='default'
                     />
-                    {/* {state.errorMessage.length > 0 ? <Element.Text style={{color:'red', fontSize:15, marginLeft:20, }}>{ state.errorMessage}</Element.Text> : null} */}
+                    {state.errorMessage.length > 0 ? <Element.Text style={{color:'red', fontSize:15, marginLeft:20, }}>{ state.errorMessage}</Element.Text> : null}
                     <Element.Button
                         title='Forget Password?'
                         type='clear'

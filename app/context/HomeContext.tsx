@@ -30,12 +30,9 @@ const getUser = (dispatch: (arg0: { type: string; payload: any; }) => void) => {
     return async () => {
         try {
             const token = await AsyncStorage.getItem('token')
-            // console.log(token)
-
             const response = await Server.get('/user', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'content-type': 'multipart/form-data'
                 }
             });
             dispatch({ type: 'get_user', payload: response.data.message })
@@ -113,73 +110,57 @@ const initiateCardTrade = (dispatch: any) => {
     return async (id: any, amount: any, comment: any, image: any, rate: any, callback: any) => {
         try {
             const token = await AsyncStorage.getItem('token')
+            let formData = new FormData();
 
-            let data = {
-                card_type_id: id,
-                amount: amount,
-                comment: comment,
-                rate: rate
+            for (let i = 0; i < image.length; i++) {
+                formData.append(`card[${i}]`, { uri: image[i].url, name: image[i].name, type: image[i].type })
             }
-            const formData = new FormData();
-            formData.append('data', JSON.stringify(data));
+            formData.append("card_type_id", id);
+            formData.append("rate", rate);
+            formData.append("amount", amount);
+            formData.append("comment", comment)
 
-            const option = { content: formData }
+            const response = await fetch("https://bda418c1f2e2.ngrok.io/giftcard/initiate-trade", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            callback()
+        }
 
-            const response = await Server.post('/giftcard/initiate-trade',
-                { data: formData },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        // 'content-type': `multipart/form-data; boundary=--------something awesome`,
-                    },
-                }
-            );
-            console.log(response)
-
-        } catch (error) {
-            console.log(error.response)
-            //dispatch({ type: 'add_error', payload: "something went wrong, try again" })
+        catch (error) {
+            dispatch({ type: 'add_error', payload: "something went wrong, try again" })
         }
     }
 }
 
 const initiateCoinTrade = (dispatch: any) => {
-    return async (id: string | Blob, amount: string | Blob, comment: string | Blob, image: string | any[], rate: string | Blob, callback: any) => {
+    return async (id: number | Blob, amount: string | Blob, comment: string | Blob, image: string | any[], rate: string | Blob, callback: any) => {
         try {
             const token = await AsyncStorage.getItem('token')
-            let formdata = new FormData()
-            formdata.append('coin_id', id)
-            formdata.append('rate', rate)
-            formdata.append('amount', amount)
-            formdata.append('comment', comment)
-            for (let i = 0; i < image.length; i++) {
-                formdata.append("receipt[]", {
-                    name: image[i].name,
-                    uri: Platform.OS === 'ios' ? image[i].uri.replace('file://', '') : image[i].uri,
-                    type: 'jpeg'
-                })
-            }
+            let formData = new FormData();
+            formData.append(`receipt`, { uri: image.url, name: image.name, type: image.type })
+            formData.append("coin_id", id);
+            formData.append("rate", rate);
+            formData.append("amount", amount);
+            formData.append("comment", comment)
 
-            for (let [key, value] of formdata.entries()) {
-                console.log(`${key}: ${value}`);
-            }
-        
-            const response = await Server.post('/coin/initiate-trade',
-                { data: formdata },
-                // {mode: 'cors'},
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'user-agent': 'Thunder Client (https://www.thunderclient.io)',
-                        'content-type': `multipart/form-data; boundary=${formdata._boundary}`,
-                    },
-                }
-            );
-            console.log(response)
+            const response = await fetch("https://bda418c1f2e2.ngrok.io/coin/initiate-trade", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            callback()
+        }
 
-        } catch (error) {
-            console.log(error.response.data)
-            //dispatch({ type: 'add_error', payload: "something went wrong, try again" })
+        catch (error) {
+            dispatch({ type: 'add_error', payload: "something went wrong, try again" })
         }
     }
 }
@@ -238,13 +219,7 @@ const bankAccountName = (dispatch: any) => {
         } catch (error) {
             console.log(error, 'i worked too')
         }
-        // try {
 
-        // }
-        // catch(err) {
-        //     console.log('err.response')
-        //     dispatch({ type: 'add_error', payload: "Network error" })
-        // }
     }
 
 }
@@ -252,11 +227,11 @@ const bankAccountName = (dispatch: any) => {
 const addAccount = (dispatch: any) => {
     return async (code: any, accountName: any, accountNumber: any, bankName: any, callback: (arg0: string) => void) => {
         try {
-            console.log(code, accountNumber, accountName, bankName) 
+            console.log(code, accountNumber, accountName, bankName)
             const token = await AsyncStorage.getItem('token')
             const response = await Server.post(`/user/add-account/`,
                 {
-                   'bank_code': code,
+                    'bank_code': code,
                     'account_number': accountNumber,
                     'account_name': accountName,
                     'bank': bankName
@@ -273,6 +248,29 @@ const addAccount = (dispatch: any) => {
             // dispatch({ type: 'add_error', payload: error.response.data.message})
         }
     }
+}
+
+const withdraw = (dispatch: any) => {
+    return async (bank: string, amount: string) => {
+        try {
+            const token = await AsyncStorage.getItem('token')
+            const response = await Server.post('/user/withdraw', {
+                bank, amount
+            },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                }
+            )
+            callback()
+
+        } catch (error) {
+
+        }
+
+    }
+
 }
 
 export const { Context, Provider } = createDataContext(homeReducer,

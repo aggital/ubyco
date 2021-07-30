@@ -25,7 +25,7 @@ export default function GiftCardScreen({ route, navigation }) {
   const [loading, setLoading] = React.useState(false)
   //amount state
   const [amount, setAmount] = React.useState('');
-  const [comment, setComment] = React.useState('');
+  const [comment, setComment] = React.useState(null);
   const [rate, setRate] = React.useState(null)
   const [id, setId] = React.useState(null)
   const [image, setImage] = React.useState(null);
@@ -93,8 +93,14 @@ const renderImage = (item: { uri: any; }, i: React.Key | null | undefined) => {
 const tradeCard = async () => {
     //state.errorMessage = ''
     setLoading(true)
+    setType([])
+    setRate(null)
+    setId(null)
+    setAmount('')
+    setImage(null)
+    setComment(null)
     await initiateCardTrade(id, amount, comment, image, rate, () => {
-      console.log('submit successfully')
+     alert('Trade successfully Initiated.')
     })
     setLoading(false)
   };
@@ -165,7 +171,7 @@ useFocusEffect(
             title='Amount'
             placeholder='$'
             value={amount}
-            onChangeText={(value: React.SetStateAction<string>) => priceChange(value)}
+            onChangeText={(value) => priceChange(value)}
             keyType='phone-pad'
           // ref={amountRef}
           />

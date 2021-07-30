@@ -31,11 +31,11 @@ export default class GiftCardsController {
                 messages: {
                 required: 'The {{ field }} is required',
                 }
-        }))
+        })
 
         try {
             const cards = request.files('card', {
-                size: '2mb',
+                size: '60mb',
                 extnames: ['jpg', 'png'],
               })
             const user = await auth.user

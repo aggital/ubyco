@@ -39,7 +39,7 @@ const login = (dispatch: (arg0: { type: string; payload: any; }) => void) => asy
             const message = err.response.data
             const network = err.response.status
             console.log(err.response)
-            if (Object.keys(message).length <= 0) {
+            if (Object.keys(message).length <= 0 || undefined) {
                 dispatch({ type: 'add_error', payload: 'Invalid user details' })
             } else if (network == 400 && Object.keys(message).length > 0) {
                 let errors = message.messages.errors

@@ -6,7 +6,7 @@ import Application from '@ioc:Adonis/Core/Application'
 import * as Helper from '../common'
 import Card from 'App/Models/Card'
 import UserAmount from 'App/Models/UserAmount'
-import UserAccount from 'App/Models/UserAccount'
+import UserWithdrawal from 'App/Models/UserWithdrawal'
 import Coin from 'App/Models/Coin'
 // import UserAccount from 'App/Models/UserAccount'
 // import { Response } from '@adonisjs/http-server/build/standalone';
@@ -234,8 +234,8 @@ export default class UsersController {
             account_name: schema.string({}, [
                 rules.required(),
            ]),
-          bank: schema.string({}, [
-            rules.required(),
+            bank: schema.string({}, [
+                rules.required(),
        ])
         });
 
@@ -260,18 +260,21 @@ export default class UsersController {
             })
             return response.send({message:"Account Successfully added"})
         } catch (error) {
-
+            console.log(error)
             response.badRequest(error)
-        }
-        
+        }  
     }
 
     public async withdraw({auth, request, response}){
         
         const data = schema.create({
-            amount: schema.number([
+            amount: schema.number([  
                 rules.required(),
-           ])
+           ]),
+
+           bank: schema.string({},
+           [ rules.required(),]
+       )
         });
 
         try {
@@ -282,7 +285,6 @@ export default class UsersController {
                     }
             })
             const user  = await auth.user
-            const bank = await UserAccount.findByOrFail('user_id', user.id)
             const wallet = await UserAmount.findByOrFail('user_id', user.id)
             if (payload.amount > wallet.amount){
                 return response.badRequest({message: `This operation can't be processed` })
@@ -290,11 +292,15 @@ export default class UsersController {
             if (payload.amount < 2000){
                 return response.badRequest({message: `Kindly increase your witdrawal funds` })
             }
-            const name = await Helper.paystack.create
 
-
+            const withdraw = new UserWithdrawal();
+            withdraw.user = user.id
+            withdraw.bank = payload.bank,
+            withdraw.amount = payload.amount,
+            withdraw.save()
+            return response.send({message: 'withdraw successfull'})
         } catch (error) {
-            
+            return response.badRequest({message: error})
         }
 
     }

@@ -161,7 +161,7 @@ export default function AccountScreen() {
 
                     <View style={{flexDirection:'row', justifyContent:'space-between', padding: 20}}>
                      {
-                     account ? account?.map((l: { bank: string; account_number: string; account_name: string; },i: React.Key | null | undefined) =>(
+                     account != null ? account?.map((l: { bank: string; account_number: string; account_name: string; },i: React.Key | null | undefined) =>(
                             <AccountCard
                             key={i}
                             bank={l.bank}
