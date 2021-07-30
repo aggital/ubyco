@@ -2,7 +2,7 @@ import Env from '@ioc:Adonis/Core/Env'
 // import AWS from  'aws-sdk'
 import PayStack from 'paystack-node'
 
-export const sendTokens: any = (phone: string, message: string, ) => {
+export const sendToken: any = (phone: string, message: string, ) => {
   const accountSid = Env.get('TWILIO_ACCOUNT_SID');
   const authToken = Env.get('TWILIO_AUTH_TOKEN');
   const client = require('twilio')(accountSid, authToken);
@@ -10,7 +10,7 @@ export const sendTokens: any = (phone: string, message: string, ) => {
   client.messages
     .create({
        body: message,
-       from: '+15017122661',
+       from: '+18573203152',
        to: phone
      })
     .then(message => console.log(message.sid));

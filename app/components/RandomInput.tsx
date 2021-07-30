@@ -12,7 +12,7 @@ interface Props {
     title:string;
   }
 
-const RandomInput: FC<Props> = ({title, keyType, placeholder, disable, secureTextEntry, value, onChangeText }) => {
+const RandomInput: FC<Props> = ({title, keyType, placeholder, disable, secureTextEntry, value, onChangeText, ...otherProps }) => {
     return (
             <View style={styles.random}>
                 <Element.Text style={styles.randomText}>

@@ -6,7 +6,7 @@ interface Props {
     name: string;
  }
 
-const Title: FC<Props>  = ({name}) => {
+const Title: FC<Props> = ({name}) => {
     return (
         <View>
              <Text h3 style={styles.headerText}>

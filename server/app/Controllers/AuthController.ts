@@ -2,7 +2,6 @@
 import { schema, rules, validator } from "@ioc:Adonis/Core/Validator";
 import * as Helper from "../common";
 import User from "../Models/User";
-import NotfoundException from "App/Exceptions/NotfoundException";
 
 export default class AuthController {
   public async register({ request, response }) {
@@ -38,7 +37,7 @@ export default class AuthController {
         ],
       });
       // send token to phone number
-      // await Helper.sendToken(payload.phone, `your Ubyco token is ${verification_code}`)
+      await Helper.sendToken(payload.phone, `your Ubyco token is ${verification_code}`)
 
       //Create new user
       const user = new User();
@@ -54,7 +53,7 @@ export default class AuthController {
     }
   }
 
-  public async verify({ auth, request, response }) {
+  public async verify({auth,request, response }) {
     const data = schema.create({
       verification_code: schema.string({}, [rules.required()]),
     });
@@ -71,9 +70,6 @@ export default class AuthController {
         payload.verification_code
       );
 
-      
-        user.is_verified = true;
-
         //split the full name for paystack customer account creation
         let name = user.fullname.split(" ");
 
@@ -87,9 +83,11 @@ export default class AuthController {
         //add customer_code to user details for future communication
         user.customer_id = createCustomer.body.data.customer_code;
         //create user wallet
-        await user.related("wallet").create({
+        await user.related("userAmount").create({
           amount: "0",
         });
+
+        user.is_verified = true;
         //save updated user
         await user.save();
         // Generate Token

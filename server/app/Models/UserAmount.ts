@@ -16,7 +16,7 @@ export default class UserAmount extends BaseModel {
   public user_id: number
 
   @column()
-  public amount : number
+  public amount : string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

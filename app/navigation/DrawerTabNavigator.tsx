@@ -8,13 +8,15 @@
  import { createStackNavigator } from '@react-navigation/stack';
  import * as React from 'react';
  import HomeScreen from '../screens/HomeScreen';
- import GIftCardScreen from '../screens/GiftCardScreen';
+//  import GIftCardScreen from '../screens/GiftCardScreen';
  import { HomeParamList} from '../types';
  import CustomSideBar from './CustomSideBar'
 import GiftCardScreen from '../screens/GiftCardScreen';
 import CoinScreen from '../screens/CoinScreen';
 import RateCalculatorScreen from '../screens/RateCalculatorScreen'
 import WithdrawalScreen from '../screens/WithdrawalScreen'
+import AccountScreen from '../screens/AccountScreen'
+
  
  const DrawerTab = createDrawerNavigator();
 
@@ -100,7 +102,7 @@ import WithdrawalScreen from '../screens/WithdrawalScreen'
 
             <DrawerTab.Screen
                 name="Account Details"
-                component={HomeNavigator}
+                component={AccountNavigator}
                 options={{
                     drawerIcon: () => (
                         <AntDesign
@@ -200,8 +202,6 @@ import WithdrawalScreen from '../screens/WithdrawalScreen'
       </HomeStack.Navigator>
     );
   }
-
-
   
   function WithdrawalNavigator() {
     return (
@@ -209,6 +209,20 @@ import WithdrawalScreen from '../screens/WithdrawalScreen'
         <HomeStack.Screen
           name="WithdrawalScreen"
           component={WithdrawalScreen}
+          options={{
+             headerShown: false
+           }}
+        />
+      </HomeStack.Navigator>
+    );
+  }
+
+  function AccountNavigator() {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="AccountScreen"
+          component={AccountScreen}
           options={{
              headerShown: false
            }}

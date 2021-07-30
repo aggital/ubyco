@@ -6,7 +6,8 @@ import Application from '@ioc:Adonis/Core/Application'
 import * as Helper from '../common'
 import Card from 'App/Models/Card'
 import UserAmount from 'App/Models/UserAmount'
-import UserAccount from 'App/Models/UserAccount'
+import UserWithdrawal from 'App/Models/UserWithdrawal'
+import Coin from 'App/Models/Coin'
 // import UserAccount from 'App/Models/UserAccount'
 // import { Response } from '@adonisjs/http-server/build/standalone';
 
@@ -148,8 +149,17 @@ export default class UsersController {
     public async card({response}){
         try {
             const card = await Card.all()
-            // await user?.load('userAmount')
             return response.send({message: card})
+        } catch (error) {
+            return response.badRequest(error)
+        }
+        
+    }
+
+    public async coin({response}){
+        try {
+            const coin = await Coin.all()
+            return response.send({message: coin})
         } catch (error) {
             return response.badRequest(error)
         }
@@ -169,7 +179,7 @@ export default class UsersController {
                     }
             })
             const card : any= await Card.findBy('name', payload.name) 
-            await card.load('cardTypes')
+            await card?.load('cardTypes')
             return response.send({message: card?.cardTypes})
         } catch (error) {
             console.log(error)
@@ -223,7 +233,10 @@ export default class UsersController {
             ]),
             account_name: schema.string({}, [
                 rules.required(),
-           ])
+           ]),
+            bank: schema.string({}, [
+                rules.required(),
+       ])
         });
 
         try {
@@ -234,32 +247,34 @@ export default class UsersController {
                     }
             })
             const user = await auth.user
-            await user.load('userAccounts')
+            await user?.load('userAccounts')
             
-            if (user.userAccounts !== null){
-                console.log(user?.userAccounts)
-                return response.send({message: "You already have an account"})
-                
+            if (user.userAccounts.length === 2){
+                return response.send({message: "Account limit exceeded"})
             }
             await user.related('userAccounts').create({
                 bank_code: payload.bank_code,
                 account_number: payload.account_number,
-                account_name: payload.account_name
+                account_name: payload.account_name,
+                bank: payload.bank
             })
-            return response.send({message:"Acount Successfully added"})
+            return response.send({message:"Account Successfully added"})
         } catch (error) {
             console.log(error)
             response.badRequest(error)
-        }
-        
+        }  
     }
 
     public async withdraw({auth, request, response}){
         
         const data = schema.create({
-            amount: schema.number([
+            amount: schema.number([  
                 rules.required(),
-           ])
+           ]),
+
+           bank: schema.string({},
+           [ rules.required(),]
+       )
         });
 
         try {
@@ -270,7 +285,6 @@ export default class UsersController {
                     }
             })
             const user  = await auth.user
-            const bank = await UserAccount.findByOrFail('user_id', user.id)
             const wallet = await UserAmount.findByOrFail('user_id', user.id)
             if (payload.amount > wallet.amount){
                 return response.badRequest({message: `This operation can't be processed` })
@@ -278,14 +292,17 @@ export default class UsersController {
             if (payload.amount < 2000){
                 return response.badRequest({message: `Kindly increase your witdrawal funds` })
             }
-            const name = await Helper.paystack.create
 
-
+            const withdraw = new UserWithdrawal();
+            withdraw.user = user.id
+            withdraw.bank = payload.bank,
+            withdraw.amount = payload.amount,
+            withdraw.save()
+            return response.send({message: 'withdraw successfull'})
         } catch (error) {
-            
+            return response.badRequest({message: error})
         }
 
     }
 
-    
 }

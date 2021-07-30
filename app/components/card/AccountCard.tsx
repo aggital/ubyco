@@ -1,27 +1,29 @@
-import React, {FC} from 'react'
+import React ,{FC} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import * as Element from 'react-native-elements'
 
+
 interface Props {
-    id: string,
-    amount: string
+    bank: string;
+    accountNumber: string,
+    name: string
  }
-const Card: FC<Props> = ({id,amount, ...otherProps}) => {
+const AccountCard :FC<Props> = ({bank,accountNumber, name}) => {
     return (
         <View style={styles.container}>
-            <Element.Text style={styles.balanceText}>Available Balance</Element.Text>
-            <Element.Text style={styles.idText}>ID: {id}</Element.Text>
-            <Element.Text style={styles.idText}>&#8358; {amount}</Element.Text>
+            <Element.Text style={styles.balanceText}>Bank:{bank} </Element.Text>
+            <Element.Text style={styles.idText}>Account No: {accountNumber}</Element.Text>
+            <Element.Text style={styles.idText}>Name: {name}</Element.Text>
         </View>
     )
 }
 
-export default Card
+export default AccountCard
 
 const styles = StyleSheet.create({
     container:{
-        height: 150,
-        width: 350,
+        height: 190,
+        width: 180,
         backgroundColor: '#f63757',
         alignContent:'center',
         shadowOpacity:0.4,

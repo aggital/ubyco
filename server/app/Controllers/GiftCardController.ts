@@ -35,7 +35,7 @@ export default class GiftCardsController {
 
         try {
             const cards = request.files('card', {
-                size: '2mb',
+                size: '60mb',
                 extnames: ['jpg', 'png'],
               })
             const user = await auth.user
@@ -59,10 +59,11 @@ export default class GiftCardsController {
             transaction.cards = Object(JSON.stringify(name))
             transaction.save()
             return response.send({message: transaction})
-        } catch (error) {
-            return response.badRequest(error)  
+        } catch(error) {
+            console.log(error) 
         }
     }
+          
 
     public async getAllTrade({response, auth}){
         try {
@@ -88,8 +89,8 @@ export default class GiftCardsController {
           })
            return response.send({message: transaction})
         } catch (error) {
-            console.log(error)
-            return response.badRequest(error)
+            return(error)
+            // return response.badRequest(error)
         }
     }
 
